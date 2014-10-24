@@ -1,6 +1,7 @@
 Building a simple LEMP stack and deploying Application using Ansible Playbooks.
 -------------------------------------------
-
+Still in development!
+ 
 These playbooks require Ansible 1.2.
 
 These playbooks are meant to be a reference and starter's guide to building
