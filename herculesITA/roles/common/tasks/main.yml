@@ -1,0 +1,37 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- name: Install XFS FS support
+  yum: name=xfsprogs state=present
+  tags: xfs
+
+# Create a volume group on top of {{new_disk}} with physical extent size = 32MB. 
+- name: Create new LVM VG 
+  lvg:  vg={{ create_vgname }} pvs={{ new_disk }} pesize=32 state=present
+
+# Create a logical volume of full disk size of {{new_disk}}.
+- name: Create LVM LV
+  lvol: vg={{ create_vgname }} lv={{ create_lvname }} size={{ create_lvsize }}
+
+- name: Create a new XFS filesystem on the LV
+  filesystem: fstype={{ filesystem }} dev=/dev/{{ create_vgname }}/{{ create_lvname }}
+
+- name: Create a directory for mounting the LV MUST HAPPEN AFTER MOUNT
+  file: path=/astro/{{ ansible_hostname }}/{{ create_lvname }}/ state=directory mode={{ mount_data_path_mode }} 
+
+# MOUNT d1 to ..
+- name: Mount the LV 
+  mount: name=/astro/{{ ansible_hostname }}/{{ create_lvname }} src=/dev/mapper/{{ create_vgname }}-{{ create_lvname }} fstype={{ filesystem }} state=mounted 
+
+- name: Allow LDAP login of steinhh
+  lineinfile: dest=/etc/passwd line="+steinhh"
+  
+- name: Allow LDAP login of osdcapps
+  lineinfile: dest=/etc/passwd line="+osdcapps"
+
+- name: Create a home directory for {{ owner_user }}
+  file: path=/astro/{{ ansible_hostname }}/{{ create_lvname }}/{{ owner_user }} state=directory mode={{ mount_data_path_mode }} owner={{ owner_user }} group={{ owner_group }}
+
+#- name: Test Ansible {{ ansible_hostname }}
+#  template: src="hostname.txt" dest="/tmp"  
+

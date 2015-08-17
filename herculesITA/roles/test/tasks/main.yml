@@ -1,0 +1,6 @@
+---
+#- include: install_httpd.yml
+#- include: copy_code.yml
+
+- name: Test Ansible hostname
+  template: src="hostname.txt" dest="/tmp" 
