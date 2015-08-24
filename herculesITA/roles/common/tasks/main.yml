@@ -14,7 +14,7 @@
   lvol: vg={{ create_vgname }} lv={{ create_lvname }} size={{ create_lvsize }}
 
 - name: Create a new XFS filesystem on the LV
-  filesystem: fstype={{ filesystem }} dev=/dev/{{ create_vgname }}/{{ create_lvname }}
+  filesystem: fstype={{ filesystem }} dev=/dev/{{ create_vgname }}/{{ create_lvname }} force=yes
 
 - name: Create a directory for mounting the LV MUST HAPPEN AFTER MOUNT
   file: path=/astro/{{ ansible_hostname }}/{{ create_lvname }}/ state=directory mode={{ mount_data_path_mode }} 
@@ -22,6 +22,10 @@
 # MOUNT d1 to ..
 - name: Mount the LV 
   mount: name=/astro/{{ ansible_hostname }}/{{ create_lvname }} src=/dev/mapper/{{ create_vgname }}-{{ create_lvname }} fstype={{ filesystem }} state=mounted 
+
+# MOUNT propus.uio.no:/mn/propus/u1 ..
+- name: Mount propus.uio.no:/mn/propus/u1 to /net/propus.uio.no/mn/propus/u1
+  mount: name=/net/{{ server_propus }}/{{ propus_nfs_path }} src={{ server_propus }}:{{ propus_nfs_path }} fstype=nfs state=mounted 
 
 - name: Allow LDAP login of steinhh
   lineinfile: dest=/etc/passwd line="+steinhh"
@@ -31,6 +35,10 @@
 
 - name: Create a home directory for {{ owner_user }}
   file: path=/astro/{{ ansible_hostname }}/{{ create_lvname }}/{{ owner_user }} state=directory mode={{ mount_data_path_mode }} owner={{ owner_user }} group={{ owner_group }}
+
+
+
+
 
 #- name: Test Ansible {{ ansible_hostname }}
 #  template: src="hostname.txt" dest="/tmp"  
