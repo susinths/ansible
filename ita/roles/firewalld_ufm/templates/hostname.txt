@@ -1,1 +1,0 @@
-Susin Welcome to host {{ ansible_hostname }}!
