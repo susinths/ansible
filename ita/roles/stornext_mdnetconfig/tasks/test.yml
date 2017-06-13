@@ -1,0 +1,13 @@
+---
+# This playbook contains play to prepare the system and install StorNext FC-client on RHEL7 workstations and servers
+
+    
+#TODO Calucate and add right swap size
+
+
+- name: Update fstab to mount the disks with correct dependencies
+  lineinfile: line="{{ lookup('file', '/astro/local/maint/downloads/StorNext/fstab') }}" dest=/etc/fstab
+
+
+
+ 

@@ -1,0 +1,111 @@
+---
+# This playbook contains common plays for setting up FS servers for osdcapps/Stein Vidar
+
+
+# Create a volume group on top of {{new_disk}} with physical extent size = 32MB. 
+#- name: Create new LVM VG 
+#  lvg:  vg={{ create_vgname }} pvs={{ disk_fs }} pesize=32 state=present
+
+# Create a logical volume of disk size of {{fs_lvsize}}.
+- name: Create LVM LV
+  lvol: vg={{ default_vgname }} lv={{ create_lvname }} size={{ fs_lvsize }}
+
+- name: Create a new XFS filesystem on the LV
+  filesystem: fstype={{ filesystem }} dev=/dev/{{ default_vgname }}/{{ create_lvname }} force=yes
+
+- name: Create a directory for mounting the LV MUST HAPPEN AFTER MOUNT
+  file: path=/astro/{{ ansible_hostname }}/{{ create_lvname }}/ state=directory mode={{ mount_data_path_mode }} 
+
+# MOUNT d1 to /astro/hostname/d1
+- name: Mount the LV 
+  mount: name=/astro/{{ ansible_hostname }}/d1 src=/dev/mapper/{{ default_vgname }}-{{ create_lvname }} fstype={{ filesystem }} state=present
+
+- name: Create a home directory for sdc
+  file: path=/astro/{{ ansible_hostname }}/{{create_lvname }}/sdc state=directory mode={{ mount_data_path_mode }} owner={{ owner_user }} group={{ owner_group }}
+
+- name: Create a home directory for osdcapps
+  file: path=/astro/{{ ansible_hostname }}/{{create_lvname }}/{{ owner_user}} state=directory mode={{ mount_data_path_mode }} owner={{ owner_user }} group={{ owner_group }}
+
+###TODO: DONE! ###
+#   semanage fcontext -a -e /home /astro/osdc-db/d1/osdcapps
+#   restorecon -Rv /astro/osdc-db/d1/osdcapps
+- name: Set correct SELinux context for /astro/{{ ansible_hostname }}/{{ create_lvname }}/osdcapps
+  shell: /usr/sbin/semanage fcontext -a -e /home /astro/{{ ansible_hostname }}/{{ create_lvname }}/osdcapps && /usr/sbin/restorecon -Rv /astro/{{ ansible_hostname }}/{{ create_lvname }}/osdcapps
+
+###TODO ### Do NOT use /mn/ but /astro/
+- name: Set correct SELinux context (system_u:object_r:httpd_sys_content_t:s0) for /astro/{{ ansible_hostname }}/{{ create_lvname }}/sdc
+  shell: /usr/sbin/semanage fcontext -a -t httpd_sys_content_t  /astro/{{ ansible_hostname }}/{{ create_lvname }}/sdc && /usr/sbin/restorecon -Rv /astro/{{ ansible_hostname }}/{{ create_lvname }}/sdc
+
+- name: Mount the disks in fstab
+  shell: mount -a
+
+
+
+### TODO Stein's div permissions DONE ! ###
+#Add the following to /etc/sudoers
+#steinhh ALL=NOPASSWD:/usr/bin/systemctl start rh-mariadb100-mariadb.service, /usr/bin/systemctl stop rh-mariadb100-mariadb.service, /usr/bin/systemctl restart rh-mariadb100-mariadb.service
+#steinhh ALL=NOPASSWD:/usr/bin/systemctl start httpd, /usr/bin/systemctl restart httpd, /usr/bin/systemctl stop httpd
+#steinhh ALL=(mysql) NOPASSWD: /usr/bin/tcsh
+
+#susinths ALL=(mysql) NOPASSWD:  /bin/bash
+
+
+#- name: Set ACL permissions to steinhh & osdcapps for div paths #1
+#setfacl -R -m u:steinhh:rwx  /etc/opt/rh/rh-mariadb100/my.cnf.d/ /etc/httpd/conf  # does this work with 2 dirs? #OK
+#setfacl -Rd -m  u:steinhh:rwx  /etc/opt/rh/rh-mariadb100/my.cnf.d/ #OK
+#setfacl -R -m u:steinhh:rx,u:osdcapps:rx  /var/log/httpd #OK
+#setfacl -R -m u:steinhh:rwx,u:osdcapps:rwx  /var/www/html #OK
+# setfacl -Rd -m u:steinhh:rwx,u:osdcapps:rwx  /var/www/html # OK
+#  acl: name={{ item.path }} entity={{ item.username }} permissions=rwx etype=user state=present recursive=yes 
+#  with_items:
+#  - { path: '/etc/opt/rh/rh-mariadb100/my.cnf.d', username: 'steinhh' }
+#  - { path: '/etc/httpd/conf', username: 'steinhh' }  
+#  - { path: '/var/www/html', username: 'steinhh' }
+#  - { path: '/var/www/html', username: 'osdcapps' }
+
+### TODO same as above, but with defaut=yes ###
+
+#- name : Set ACL permissions #2   
+#  acl: name={{ item.path }} entity={{ item.username }} permissions=rx etype=user state=present recursive=yes default=no
+#  with_items:
+#  - { path: '/var/log/httpd', username: 'steinhh' }
+#  - { path: '/var/log/httpd', username: 'osdcapps' }
+
+### TODO same as above, but with defaut=yes ###
+
+#Apache read from NFS mounts & send mail
+# semanage boolean -m --on  httpd_use_nfs
+# semanage boolean -m --on  httpd_can_sendmail
+#- name: Configure SELinux to allow httpd to use NFS and send mail
+#  seboolean: name={{ item }} state=true persistent=yes 
+#  with_items:
+#  - httpd_use_nfs
+#  - httpd_can_sendmail
+#  when: sestatus.rc != 0
+
+#chown -R /var/opt/rh.../mysql mysql:mysql
+#- name: Make sure 'mysql' owns  {{ mariadb10_datadir}}
+#  file: path={{ mariadb10_datadir }} owner=mysql group=mysql mode="u=rwx,g=rx,o=rx" 
+
+#- name: Add steinhh to sudoers file
+#  copy: src=templates/sudoers.j2 dest=/etc/sudoers validate='visudo -cf %s' backup=yes
+
+
+
+
+
+#- name: Install MariaDB 10 from SCL + Apache from std repo
+#  yum: name={{ item }}  state=present
+#  tags: xfs
+#  with_items:
+#  - rh-mariadb100
+#  - rh-mariadb100-mariadb-devel.x86_64
+#  - httpd
+#  - rsync
+
+#- name: Install XFS FS support
+#  yum: name=xfsprogs state=present
+#  tags: xfs
+  
+
+

@@ -1,0 +1,18 @@
+---
+# This playbook deploys StorNext FC client to the hosts
+
+- name: apply stornext_fc_inst to the nodes
+#  hosts: hpc_4u_test
+#  hosts: hpc_4u
+#  hosts: srv_upgrades	
+#  hosts: susin_test
+#  hosts: owl_tmp3
+#  hosts: charybdis
+#  hosts: beehive
+   hosts: aramec
+   remote_user: root
+
+  roles:
+     - stornext_fc_inst
+#    - common
+#    - chrome

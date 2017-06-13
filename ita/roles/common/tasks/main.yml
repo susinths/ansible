@@ -1,0 +1,33 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+  
+#- name: Allow LDAP login of @astrofysikk-users
+#  lineinfile: dest=/etc/passwd line="+@astrofysikk-users:x:::::" 
+
+#- name: fix autofs problem by restarting the daemon
+#  service: name=autofs state=restarted 
+#  when: ansible_distribution_major_version == "7" 
+
+- name: install some packages
+  yum: name={{ item }} state=present 
+  with_items:
+  - python-pip
+  - environment-modules
+  - htop
+  - "texlive-*"
+  when: ansible_distribution_major_version == "7" 
+
+#- name: Test Ansible {{ ansible_hostname }}
+#  template: src="hostname.txt" dest="/tmp"  
+
+- name: Install Google Chrome repo
+  copy: dest=/etc/yum.repos.d/google-chrome.repo src=google-chrome.repo
+  
+- name: Install Google Chrome
+  yum: name=google-chrome-stable state=present
+  when: ansible_hostname == {{ item }}
+  with_items:
+  - "kitalpha"
+  - "nishtya"
+  

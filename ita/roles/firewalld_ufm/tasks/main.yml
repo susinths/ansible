@@ -1,0 +1,111 @@
+---
+# This playbook contains play to configure firewalld for UFM: 6306: UFM agent and 8005: UFM monitoring
+- name: Add firewalld service definition for lanclient and ufm, then reload firewalld
+  template: src={{ item }}.j2 dest=/etc/firewalld/services/{{ item }}
+  with_items:
+    - lanclient.xml
+    - ufm.xml
+#    - [ 'lanclient.xml.j2', '/etc/firewalld/services/lanclient.xml' ]
+#    - [ 'ufm.xml.j2', '/etc/firewalld/services/ufm.xml' ]
+  notify:
+    - reload firewalld
+
+- name: Add a sytemd service to restore ipset set on reboot 
+  template: src={{ item }}.j2 dest=/etc/systemd/system/{{ item }}
+  with_items:
+    - ipset_restore.service
+  when: ( ansible_hostname  != "sunglare") or (ansible_hostname != "sunglow") or (ansible_hostname  != "sunbear" ) or (ansible_hostname  != "euclid21" )
+
+- name: Enable ipset_restore.service on lanclients only!
+  service: name={{ item }} enabled=yes
+  with_items:
+   - ipset_restore.service
+  when: ( ansible_hostname  != "sunglare") or (ansible_hostname != "sunglow") or (ansible_hostname  != "sunbear" ) or (ansible_hostname  != "euclid21" )
+  
+  
+# This is needed, since the reload will only be triggered once per play at end of the play!
+- meta: flush_handlers
+
+- name: Lanclient custom firewall services and enable them in zone dmz
+  firewalld: service="{{ item }}" zone="{{ firewalld_zone_dmz }}"  permanent=true state=enabled
+  with_items: 
+#    - 'ufm'
+    - 'lanclient'
+  when: ( ansible_hostname  == "sunglare") or (ansible_hostname == "sunglow") or (ansible_hostname  == "sunbear" )
+#    - "{{ firewalld_zone_dmz }}"
+
+
+- name: Add ufm custom firewall services and enable them in zone internal
+  firewalld: service="{{ item }}" zone="{{ firewalld_zone_internal }}"  permanent=true state=enabled
+  with_items: 
+    - 'ufm'
+
+
+- name: Create an ipset to be used by firewalld rich rules task below 
+  shell: /usr/sbin/ipset -N {{ lcgateway_ipsetname }} hash:ip
+  ignore_errors: yes
+  when: ansible_hostname != "euclid21"
+
+- name: Add IPs to ipset created above
+  shell: /usr/sbin/ipset -A  {{ lcgateway_ipsetname }} {{ item }}
+  with_items:
+    - "{{ lcgateway01 }}"
+    - "{{ lcgateway02 }}"
+  ignore_errors: yes
+  when: ansible_hostname != "euclid21"
+
+- name: Save ipset created
+  shell: /usr/sbin/ipset save > {{ ipset_rules_files }}
+  ignore_errors: yes
+  when: ansible_hostname != "euclid21"
+
+#TODO
+#Restore IPSET on REBOOOT
+
+
+
+
+
+# Direct rich rules are needed to block outgoing (OUTPUT chain) traffic from the interface using dport
+- name: Add direct rich rules to block outgoing (OUTPUT chain) traffic from the interface {{ firewalld_ifaces_public }} to destination server and dports 
+  shell: /usr/bin/firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -o "{{ firewalld_ifaces_public }}" -p tcp -m tcp -m multiport --dports "{{ lcgateway_portrange }}" -m set --match-set {{ lcgateway_ipsetname }} dst -j REJECT
+  when: ansible_hostname not in euclid_gpu_nodes
+
+# Direct rich rules are needed to block outgoing (OUTPUT chain) traffic from the interface using dport for GPU nodes having a different public interface name!
+- name: Add direct rich rules to block outgoing (OUTPUT chain) traffic from the interface {{ firewalld_ifaces_public_gpu_nodes }} to destination server and dports , for GPU nodes having a different public interface name!
+  shell: /usr/bin/firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -o "{{ firewalld_ifaces_public_gpu_nodes }}" -p tcp -m tcp -m multiport --dports "{{ lcgateway_portrange }}" -m set --match-set {{ lcgateway_ipsetname }} dst -j REJECT
+  when: ansible_hostname in euclid_gpu_nodes
+
+
+- name: Finally reload firewalld 
+  service: name=firewalld state=restarted
+   
+
+
+
+
+#- name: Add direct rich rules to block outgoing (OUTPUT chain) traffic from the interface {{ firewalld_ifaces_public }} to destination server and dports 
+#  shell: /usr/bin/firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -o "{{ firewalld_ifaces_public }}" -p tcp -m tcp -m multiport --dports "{{ lcgateway_portrange }}" -d "{{ item }}"  -j REJECT
+#  with_items:
+#    - "{{ lcgateway02 }}"
+
+#- name: Add direct rich rules to block outgoing (OUTPUT chain) traffic from the interface {{ firewalld_ifaces_public }} to destination server and dports 
+#  shell: /usr/bin/firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -o "{{ firewalld_ifaces_public }}" -p tcp -m tcp -m multiport --dports "{{ lcgateway_portrange }}" -d "{{ item }}"  -j REJECT
+#  with_items:
+#    - "{{ lcgateway01 }}"
+
+
+#- name: Add firewalld service definition for ufm
+#  template: src=ufm.xml.j2 dest=/etc/firewalld/services/ufm.xml
+#  notify: 
+#  - reload firewalld  ##Does not work, needs a separate reload. Fixed with flush_handlers
+
+
+
+
+
+#- name: Systemd enable & start multipath
+#  service: name={{ item }} state=save enabled=yes
+#  with_items:
+#   - ipset
+#  when: (not {{ lanclient }}) and (not {{ lanclient2 }})

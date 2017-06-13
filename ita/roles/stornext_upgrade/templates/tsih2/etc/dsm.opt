@@ -1,0 +1,5 @@
+dateformat 1
+*
+domain /etc
+domain /site
+domain /var

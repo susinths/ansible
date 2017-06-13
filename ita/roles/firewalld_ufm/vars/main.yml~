@@ -1,0 +1,24 @@
+firewalld_ifaces_dmz: 'ib0.8001'
+firewalld_ifaces_trusted: [ 'ib0', 'em3' ]
+firewalld_ifaces_public: 'p1p1'
+firewalld_ifaces_public_gpu_nodes: 'enp130s0d1'
+firewalld_zone_dmz: 'dmz'
+firewalld_zone_trusted: 'trusted'
+firewalld_zone_internal: 'internal'
+firewalld_zone_public: 'public'
+
+lcgateway01: '129.240.45.66'
+lcgateway02: '129.240.45.73'
+lcgateway_ipsetname: 'lanclientgateway'
+lcgateway_portrange: '52000:62000'
+ipset_rules_files: '/etc/ipset.up.rules'
+euclid_gpu_nodes: ['euclid17-gpu',euclid17-gpu,euclid17-gpu,'euclid20-gpu']
+
+
+
+#firewalld_ifaces_zone: 'internal'
+
+#firewalld_iface1_zone: 'internal'
+
+#ganglia_clustername: hercules
+#ganglia_hostname: '{{ ganglia_clustername }}.uio.no'

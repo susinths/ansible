@@ -1,0 +1,15 @@
+---
+# This playbook deploys the whole application stack in this site.  
+
+    
+- name: apply Ganglia config changes to all nodes
+#  hosts: ganglia_owl
+#  hosts: euclid_cluster
+#  hosts: charybdis
+  hosts: beehive_cluster
+  remote_user: root
+
+  roles:
+    - ganglia
+
+

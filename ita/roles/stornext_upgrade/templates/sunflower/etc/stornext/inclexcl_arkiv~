@@ -1,0 +1,17 @@
+include /mn/stornext/d*/.../*               d-day-2e
+exclude.dir /mn/stornext/d*/.../nobackup
+exclude /.../core
+exclude /.../core.*
+exclude /.../yp/uio/*pag
+exclude /.../yp/uio/*dir
+exclude /.../.journal
+exclude /.../*.nfs
+exclude.dir /.../lost+found
+exclude.dir /.../.netscape*/cache
+exclude.dir /.../.netscape-cache
+exclude.dir /.../*netsc*/cache*
+exclude.dir /.../*scape*/Cache*
+exclude.dir /.../*.moved
+exclude.dir /.../PRISS/spool
+exclude.dir /mnt
+exclude.dir /hom

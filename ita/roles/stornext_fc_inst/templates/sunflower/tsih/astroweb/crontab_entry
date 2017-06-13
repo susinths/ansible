@@ -1,0 +1,1 @@
+08 00 * * * /mn/stornext/u3/astroweb/script/websync_prod3 >/dev/null 2>&1

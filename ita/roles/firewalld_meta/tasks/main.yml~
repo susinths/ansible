@@ -1,0 +1,52 @@
+---
+# This playbook contains play to configure firewalld for UFM: 6306: UFM agent and 8005: UFM monitoring
+- name: Add firewalld service definition for lanclient and ufm, then reload firewalld
+  template: src={{ item }}.j2 dest=/etc/firewalld/services/{{ item }}
+  with_items:
+    - lanclient.xml
+    - ufm.xml
+#    - [ 'lanclient.xml.j2', '/etc/firewalld/services/lanclient.xml' ]
+#    - [ 'ufm.xml.j2', '/etc/firewalld/services/ufm.xml' ]
+  notify:
+    - reload firewalld
+  
+# This is needed, since the reload will only be triggered once per play at end of the play!
+- meta: flush_handlers
+
+- name: Add ufm and lanclient custom firewall services and enable them
+  firewalld: service="{{ item[0] }}" zone="{{ firewalld_ifaces_zone }}"  permanent=true state=enabled
+  with_nested: 
+    - [ 'ufm','lanclient' ]
+    - "{{ firewalld_ifaces }}"
+  notify:
+    - reload firewalld
+
+- name: Create an ipset to be used by firewalld rich rules task below 
+  shell: /usr/sbin/ipset -N {{ lcgateway_ipsetname }} hash:ip netmask 24
+
+
+#  with_nested:
+
+
+# Direct rich rules are needed to block outgoing (OUTPUT chain) traffic from the interface using dports
+- name: Add direct rich rules to block outgoing (OUTPUT chain) traffic from the interface {{ iface_nonlanclient }} to destination server and dports 
+  shell: /usr/bin/firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -o p1p1 -p tcp -m tcp -m multiport --dports {{ lanclient_portrange }} -d 129.240.45.73/32 -j REJECT
+  with_nested:
+    
+
+
+
+
+
+
+
+
+#- name: Add firewalld service definition for ufm
+#  template: src=ufm.xml.j2 dest=/etc/firewalld/services/ufm.xml
+#  notify: 
+#  - reload firewalld  ##Does not work, needs a separate reload. Fixed with flush_handlers
+
+
+
+
+

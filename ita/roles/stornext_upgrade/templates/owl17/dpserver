@@ -1,0 +1,28 @@
+# ===============================
+# Disk Proxy Server Configuration
+# -==============================
+
+# ==================
+# Tunable Parameters
+# ==================
+
+# Un-comment and modify any of the following lines to override the default
+#  values for tunable parameters.
+#tcp_window_size_kb 64
+#transfer_buffer_size_kb 256
+#transfer_buffer_count 16
+#server_buffer_count 8
+#daemon_threads 8
+
+# =======================
+# Interface Configuration
+# =======================
+
+# One or more interfaces must be configured for Disk Proxy Server I/O.
+
+# Un-comment the line below to allow Disk Proxy Server I/O on interface 'em1'.
+interface em1
+
+# Un-comment the line below to allow Disk Proxy Server I/O on interface 'em3'.
+#interface em3
+

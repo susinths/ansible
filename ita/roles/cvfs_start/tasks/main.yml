@@ -1,0 +1,14 @@
+---
+# This playbook contains play to stop and turn off cvfs services (for maintenance of StorNext)
+
+- name: Start and enable CVFS service for maintenance of StorNext
+  shell: '/sbin/service cvfs start;/sbin/chkconfig cvfs on' 
+
+#  shell: 'ls /mn/stornext/u3 > /dev/null 2> /dev/null || if /usr/bin/systemctl restart rpc-statd && /usr/bin/systemctl restart autofs.service;then echo -e "{{ ansible_hostname }} - $(date +%F-%H-%M)\n" >> /root/{{ ansible_hostname }}_rhel7_autofs_fix.log;fi'
+  register: result
+#  when: ansible_lsb.major_release == "7" and ansible_lsb.id == "RedHatEnterpriseWorkstation" 
+
+#- debug: var=result
+
+
+

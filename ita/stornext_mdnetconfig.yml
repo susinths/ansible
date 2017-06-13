@@ -1,0 +1,11 @@
+---
+# This playbook configures nodes StorNext internal LAN 
+
+- name: apply stornext_mdnetconfig to the nodes
+  hosts: hercules_cluster
+  remote_user: root
+
+  roles:
+     - stornext_mdnetconfig
+#    - common
+#    - chrome

@@ -1,0 +1,16 @@
+dateformat 1
+server stornext_02B
+skipacl yes
+*
+* domain /mn/stornext/d7/Marianne1
+* domain /mn/stornext/d7/Sven1
+domain /mn/stornext/d10/HDC2
+domain /mn/stornext/d10/SAM4
+* resten av d7, 8 0g 10
+*
+*Midlertig tatt ut pga åpne filer under /mn/stornext/d7/unnif..
+*domain /mn/stornext/d7
+domain /mn/stornext/d8
+domain /mn/stornext/d10
+*
+domain /mn/stornext/d8/ITA

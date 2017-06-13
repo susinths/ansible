@@ -1,0 +1,42 @@
+---
+# This playbook deploys the whole application stack in this site.  
+
+- name: apply common configuration to all nodes
+#  hosts: hercules_cluster
+  hosts: ganglia_owl
+  remote_user: root
+
+  roles:
+#    - common
+    
+- name: apply Ganglia config changes to all nodes
+  hosts: hercules_cluster
+  remote_user: root
+
+  roles:
+    - ganglia
+
+
+
+#- name: apply test 
+#  hosts: susinhosts
+#  remote_user: root
+
+#  roles:
+#    - test
+
+
+
+#- name: configure and deploy the webservers and application code
+#  hosts: webservers
+#  remote_user: root
+
+#  roles:
+#    - web
+
+#- name: deploy MySQL and configure the databases
+#  hosts: dbservers
+#  remote_user: root
+
+#  roles:
+#    - db

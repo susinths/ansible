@@ -1,0 +1,24 @@
+---
+# This playbook contains play to setup StorNext meta data internal network at ITA 
+## 28.06.2016: RHEL 7.2 is supported by current StorNext client version ##  
+
+- name: Create the netconfig file for the StorNext meta data network interface
+  template: src=net_metadata_{{ metadata_nic }}.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{ metadata_nic }} owner=root group=root mode=0644
+
+- name: Grab the last part of the public IP of the server 
+#  command: "ls /astro/local/maint/rhel7_duplexprint/pdf*"
+   # improve with {{ public_netint }} instead of ens8f0
+  shell: "ip -f inet -o  addr show {{ public_nic }} | gawk -F '.' '{print $4}' | gawk -F '/' '{print $1}'"
+  register: ip_metadata_lastpart
+
+- name: Insert the correct IP for the meta data network interface 
+  #TODO: change ifcfg-ens8f1 to generic variable to correct interface name!
+  lineinfile: dest=/etc/sysconfig/network-scripts/ifcfg-{{ metadata_nic }} line="IPADDR=192.168.1.{{ ip_metadata_lastpart.stdout }}"
+  ignore_errors: yes
+
+- name: Bring up meta data net interface
+  shell: "/usr/sbin/ifup {{ metadata_nic }}"
+  ignore_errors: yes
+
+
+

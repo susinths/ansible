@@ -1,0 +1,120 @@
+---
+#This playbook contains play to install & configure Ganglia monitoring system. 
+
+- name: Install common packages
+  yum: name={{ item }}  state=present
+  tags: Apache
+  with_items:
+   - ganglia	
+   - ganglia-gmond
+   - mesa-libglapi
+
+- name: Install Apache for Ganglia master
+  yum: name={{ item }}  state=present
+  tags: Apache
+  with_items:
+   - httpd
+   - ganglia-gmetad
+   - ganglia-web
+  when: ansible_hostname in ganglia_masters
+
+- name: Stop gmetad on master
+  service: name=gmetad state=stopped
+  when: ansible_hostname in ganglia_masters
+  ignore_errors: yes
+
+- name: Install Ganglia master/server config file
+  template: src=gmetad_master.conf.j2 dest=/etc/ganglia/gmetad.conf
+  when: ansible_hostname in ganglia_masters
+
+- name: Install Ganglia config file on master
+  template: src=gmond_master.conf.j2 dest=/etc/ganglia/gmond.conf
+  when: ansible_hostname in ganglia_masters 
+
+- name: Install Ganglia config file on senders
+  template: src=gmond_sender.conf.j2 dest=/etc/ganglia/gmond.conf
+  when: ansible_hostname not in ganglia_masters
+
+- name: Add firewalld service definition for momfbd
+  template: src=momfbd.xml.j2 dest=/etc/firewalld/services/momfbd.xml
+  notify: 
+  - restart firewalld  ##Does not work, needs a separate reload? FIXED with flush_handler since notify are only run at end of the play
+
+- meta: flush_handlers  # This is needed to get the notify above effective at this point in the run!
+
+- name: Add momfbd custom firewall service and enable it
+  firewalld: service={{ item }} permanent=true state=enabled
+  with_items:
+  - momfbd
+  notify:
+  - restart firewalld
+
+- name: Add firewalld service definition for Ganglia on master only
+  template: src=ganglia.xml.j2 dest=/etc/firewalld/services/ganglia.xml
+  notify: 
+  - restart firewalld
+  when: ansible_hostname in ganglia_masters
+
+- meta: flush_handlers
+
+- name: Add ganglia service to firewall on Ganglia master
+  firewalld: service={{ item }} permanent=true state=enabled
+  with_items:
+  - ganglia
+  when: ansible_hostname in ganglia_masters
+
+- name: Add httpd service to firewall Ganglia master
+  firewalld: service={{ item }} permanent=true state=enabled
+  with_items:
+  - http
+  when: ansible_hostname in ganglia_masters
+
+- name: insert/update HTML surrounded by custom markers after <body> line
+  blockinfile:
+    path: /etc/httpd/conf/httpd.conf
+    marker: "#<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    insertafter: "IncludeOptional conf.d/*.conf"
+    content: |
+      NameVirtualHost *:80
+      <VirtualHost *:80>
+      ServerName {{ansible_hostname}}.uio.no
+      ServerAlias www.{{ansible_hostname}}.uio.no
+      DocumentRoot /usr/share/ganglia
+      ErrorLog /var/log/httpd/{{ansible_hostname}}-error.log
+      CustomLog /var/log/httpd/{{ansible_hostname}}-access.log combined
+      LogLevel debug
+      DirectoryIndex index.php index.html
+      
+      <Directory /usr/share/ganglia>
+      Options Indexes FollowSymlinks MultiViews
+      AllowOverride None
+      Require all granted
+      Satisfy Any
+      </Directory>
+  
+      <FilesMatch \.php$>
+           SetHandler application/x-httpd-php
+      </FilesMatch>
+    
+      </VirtualHost>
+  when: ansible_hostname in ganglia_masters
+
+- name: Start gmond on nodes
+  service: name=gmond state=restarted enabled=yes
+
+- name: chown -R nobody /var/lib/ganglia/rrds
+  shell: 'chown -R nobody /var/lib/ganglia/rrds'
+  when: ansible_hostname in ganglia_masters
+
+- name: Start gmetad on master
+  service: name=gmetad state=started enabled=yes
+  notify:
+  - restart firewalld
+  when: ansible_hostname in ganglia_masters
+
+- name: Start httpd on master
+  service: name=httpd state=started enabled=yes
+  when: ansible_hostname in ganglia_masters
+
+
+

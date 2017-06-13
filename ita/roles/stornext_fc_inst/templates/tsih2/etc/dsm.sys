@@ -1,0 +1,66 @@
+SErvername         tsm_02
+COMMmethod         TCPip
+TCPPort            1511
+TCPServeraddress   tsm-prod02.uio.no
+managedservices    schedule
+TXNBytelimit       25600
+schedmode          polling
+queryschedperiod   24
+passwordaccess     generate
+inclexcl           /etc/inclexcl
+schedlogname       /var/log/sched.log
+errorlogname       /var/log/dsmerror.log
+schedlogret        40 D
+errorlogret        40 D
+virtualmount       /etc
+*
+SErvername xsan
+   COMMmethod         TCPip
+   TCPPort            1505
+   TCPServeraddress   sumo.uio.no
+nodename xsan.uio.no
+resourceutil 5
+memoryeff yes
+managedservices schedule
+TXNBytelimit 25600
+schedmode polling
+queryschedperiod 24
+passwordaccess generate
+inclexcl /etc/xsan/inclexcl
+schedlogname /var/log/sched_xsan.log
+errorlogname /var/log/dsmerror_xsan.log
+schedlogret 40 D
+errorlogret 40 D
+
+SErvername xsan_01
+   COMMmethod         TCPip
+   TCPPort            1509
+   TCPServeraddress   tsm-prod02.uio.no
+nodename xsan.uio.no
+memoryeff yes
+managedservices schedule
+TXNBytelimit 25600
+schedmode polling
+queryschedperiod 24
+passwordaccess generate
+inclexcl /etc/xsan/inclexcl_01
+schedlogname /var/log/sched_xsan_01.log
+errorlogname /var/log/dsmerror_xsan_01.log
+schedlogret 40 D
+errorlogret 40 D
+
+SErvername xsan-kat
+   COMMmethod         TCPip
+   TCPPort            1500
+   TCPServeraddress   tsm-ksite.uio.no
+nodename xsan.uio.no
+managedservices schedule
+TXNBytelimit 25600
+schedmode polling
+queryschedperiod 24
+passwordaccess generate
+inclexcl /etc/xsan/inclexcl_kat
+schedlogname /var/log/sched_xsan_kat.log
+errorlogname /var/log/dsmerror_xsan_kat.log
+schedlogret 40 D
+errorlogret 40 D

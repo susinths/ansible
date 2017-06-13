@@ -1,0 +1,77 @@
+[astro_admin]
+        comment = STORNEXT d5/astro_admin
+        path = /mn/stornext/d5/astro_admin
+	create mode = 0660
+	directory mode = 0770
+        browseable = yes
+        public = no
+        guest ok = no
+        read only = no
+        invalid users = root
+	valid users = @astadm
+[stornext_d5]
+        comment = STORNEXT d5
+        path = /mn/stornext/d5
+	create mode = 0774
+	directory mode = 0775
+        browseable = yes
+        public = no
+        guest ok = no
+        read only = no
+        invalid users = root
+	valid users = @astrofysikk-users
+[stornext_d8]
+        comment = STORNEXT d8
+        path = /mn/stornext/d8
+	create mode = 0774
+	directory mode = 0775
+        browseable = yes
+        public = no
+        guest ok = no
+        read only = no
+        invalid users = root
+	valid users = @astrofysikk-users
+[stornext_d9]
+        comment = STORNEXT d9
+        path = /mn/stornext/d9
+	create mode = 0774
+	directory mode = 0775
+        browseable = yes
+        public = no
+        guest ok = no
+        read only = no
+        invalid users = root
+	valid users = @astrofysikk-users
+[stornext_d10]
+        comment = STORNEXT d10
+        path = /mn/stornext/d10
+	create mode = 0774
+	directory mode = 0775
+        browseable = yes
+        public = no
+        guest ok = no
+        read only = no
+        invalid users = root
+	valid users = @astrofysikk-users
+[stornext_d11]
+        comment = STORNEXT d11
+        path = /mn/stornext/d11
+	create mode = 0774
+	directory mode = 0775
+        browseable = yes
+        public = no
+        guest ok = no
+        read only = no
+        invalid users = root
+	valid users = @astrofysikk-users
+[test]
+        comment = test
+        path = /tmp
+        create mode = 0774
+        directory mode = 0775
+        browseable = yes
+        public = no
+        guest ok = no
+        read only = no
+        invalid users = root
+        valid users = amedov

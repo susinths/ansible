@@ -1,0 +1,32 @@
+
+#
+# /etc/fstab
+# Created by anaconda on Thu Jan 31 11:45:53 2013
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+/dev/mapper/internvg-root /                       ext4    defaults        1 1
+UUID=9bb82291-d761-4bf7-96eb-411e3fc2111e /boot                   ext4    defaults        1 2
+/dev/mapper/internvg-opt /opt                    ext4    defaults        1 2
+/dev/mapper/internvg-tmp /tmp                    ext4    defaults        1 2
+/dev/mapper/internvg-usr /usr                    ext4    defaults        1 2
+/dev/mapper/internvg-var /var                    ext4    defaults        1 2
+/dev/mapper/internvg-swap swap                    swap    defaults        0 0
+tmpfs                   /dev/shm                tmpfs   defaults        0 0
+devpts                  /dev/pts                devpts  gid=5,mode=620  0 0
+sysfs                   /sys                    sysfs   defaults        0 0
+proc                    /proc                   proc    defaults        0 0
+/dev/internvg/d1 	/mn/owl1/d1 		ext4	defaults	1 2
+/dev/datavg2/d2 	/mn/owl1/d2 		ext4	defaults	1 2
+/dev/datavg2/d3 	/mn/owl1/d3 		ext4	defaults	1 2
+alruba2:/mn/alruba2/astro /mn/alruba2/astro	nfs	nfsvers=3,rw,bg,hard,intr	0 0
+Planck1                 /mn/stornext/d1         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA2                    /mn/stornext/d3         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ISP1                    /mn/stornext/d5         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+#u2                      /mn/stornext/u2         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+#u1              	/mn/xsan/u1     	cvfs 	rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+#ITA             	/mn/xsan/d4     	cvfs 	rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+u3			/mn/stornext/u3		cvfs	rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA4			/mn/stornext/d7         cvfs	rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA5			/mn/stornext/d8         cvfs	rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0

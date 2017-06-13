@@ -1,0 +1,13 @@
+alruba2:/mn/alruba2/astro /mn/alruba2/astro     nfs     nfsvers=3,rw,bg,hard,intr       0 0
+Planck1                 /mn/stornext/d1         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+SAM5                    /mn/stornext/d2         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA2                    /mn/stornext/d3         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+lapalma                 /mn/stornext/d4         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ISP1                    /mn/stornext/d5         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+Scratch1                /mn/xsan/d1             cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+u3                      /mn/stornext/u3         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA4                    /mn/stornext/d7         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA5                    /mn/stornext/d8         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+PSC1                    /mn/stornext/d9         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+PSC2                    /mn/stornext/d10        cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+PSC3                    /mn/stornext/d11        cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0

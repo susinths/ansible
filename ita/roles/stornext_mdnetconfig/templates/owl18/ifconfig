@@ -1,0 +1,29 @@
+em1       Link encap:Ethernet  HWaddr C8:1F:66:EB:47:81  
+          inet addr:129.240.45.67  Bcast:129.240.45.255  Mask:255.255.255.0
+          inet6 addr: fe80::ca1f:66ff:feeb:4781/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:9537623812 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:12418441247 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:13026357297714 (11.8 TiB)  TX bytes:17611020520464 (16.0 TiB)
+          Interrupt:34 Memory:d1000000-d17fffff 
+
+em3       Link encap:Ethernet  HWaddr C8:1F:66:EB:47:85  
+          inet addr:192.168.1.67  Bcast:192.168.7.255  Mask:255.255.248.0
+          inet6 addr: fe80::ca1f:66ff:feeb:4785/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:518993412 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:492899051 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:127621109099 (118.8 GiB)  TX bytes:82406770719 (76.7 GiB)
+          Interrupt:36 Memory:d3000000-d37fffff 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:34373013 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:34373013 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:45021021430 (41.9 GiB)  TX bytes:45021021430 (41.9 GiB)
+

@@ -1,0 +1,157 @@
+---
+# This playbook contains play to setup StorNext meta data internal network at ITA 
+## 28.06.2016: RHEL 7.2 is supported by current StorNext client version ##  
+
+- name: Create the netconfig file for the StorNext meta data network interface
+  template: src=net_metadata_{{ metadata_nic }}.j2 dest=/etc/sysconfig/network-scripts/ifcfg-{{ metadata_nic }} owner=root group=root mode=0644
+
+- name: Create the firewall config file for lanclients
+  template: src=lanclient.xml dest=/etc/firewalld/services/lanclient.xml owner=root group=root mode=0644
+  when: ({{ lanclient }}) or ({{ lanclient2 }})
+
+#TODO: now firewall-cmd --reload before adding the new defined services!
+- name: Reload firewall rules
+  shell: /usr/bin/firewall-cmd --reload
+  when: ({{ lanclient }}) or ({{ lanclient2 }})  
+
+- name: Add custom firewall services and enable them         
+  firewalld: service={{ item }} permanent=true state=enabled
+  with_items:
+  - lanclient
+  when: ({{ lanclient }}) or ({{ lanclient2 }})
+
+- name: Reload firewall rules again
+  shell: /usr/bin/firewall-cmd --reload
+  when: ({{ lanclient }}) or ({{ lanclient2 }})
+
+- name: Grab the last part of the public IP of the server 
+#  command: "ls /astro/local/maint/rhel7_duplexprint/pdf*"
+   # improve with {{ public_netint }} instead of ens8f0
+  shell: "ip -f inet -o  addr show {{ public_nic }} | gawk -F '.' '{print $4}' | gawk -F '/' '{print $1}'"
+  register: ip_metadata_lastpart
+
+- name: Insert the correct IP for the meta data network interface 
+  #TODO: change ifcfg-ens8f1 to generic variable to correct interface name!
+  lineinfile: dest=/etc/sysconfig/network-scripts/ifcfg-{{ metadata_nic }} line="IPADDR=192.168.1.{{ ip_metadata_lastpart.stdout }}"
+  ignore_errors: yes
+
+- name: Bring up meta data net interface
+  shell: "/usr/sbin/ifup {{ metadata_nic }}"
+  ignore_errors: yes
+
+- name: Grab wwid of OS disk to be blacklisted by multipathd
+  shell: "/usr/lib/udev/scsi_id --whitelisted --replace-whitespace --device=/dev/sda"
+  register: wwid
+  when: (not {{ lanclient }}) and (not {{ lanclient2 }})
+  
+- debug: var=wwid verbosity=2
+  
+- name: Copy multipath config  file
+  template: src=multipath.j2 dest=/etc/multipath.conf owner=root group=root mode=0644
+  when: (not {{ lanclient }}) and (not {{ lanclient2 }})
+
+- name: Insert the wwid to be blacklisted into /etc/multipathd
+  shell: sed -ri '26s/wwid.*/wwid\t\t\t\"{{ wwid.stdout }}\"/' /etc/multipath.conf  
+  ignore_errors: yes
+  when: (not {{ lanclient }}) and (not {{ lanclient2 }})
+
+- name: Systemd enable & start autofs
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+   - autofs
+
+- name: Systemd enable & start multipath
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+   - multipathd
+  when: (not {{ lanclient }}) and (not {{ lanclient2 }})
+
+- name: Clear multipath and re-read the config
+  shell: "/sbin/multipath -F && /sbin/multipath -v2"
+  when: (not {{ lanclient }}) and (not {{ lanclient2 }})
+
+#TODO Calucate and add right swap size
+
+- name: Register the StorNext client software RPM to install
+  shell: "ls /astro/local/maint/ansible/StorNext_5.3.2/*"
+  register: stornext_rpms
+
+#- debug: var="{{ stornext_rpms.stdout.lines }}"
+#- debug: var="{{ stornext_rpms.stdout_lines}}" verbosity=2
+
+- name: Install the StorNext client software
+  yum: name={{ item }} state=present
+  with_items: "{{ stornext_rpms.stdout_lines }}"
+  ignore_errors: yes
+
+- name: Copy StorNext fsnameservers  file
+#  template: src=stornext_fsnameservers.j2 dest=/usr/cvfs/config/fsnameservers owner=root group=root mode=0644
+  template: src={{ ansible_hostname }}/fsnameservers dest=/usr/cvfs/config/fsnameservers owner=root group=root mode=0644
+#  with_items: 
+#  - "{{ ansible_hostname }}/fsnameservers.j2"
+#  - "/astro/local/maint/config_backup/{{ ansible_hostname }}/fsforeignservers"
+
+##Doesn't work - rsync incompati....
+#- name: Push fsnameservers from the backup and to remote
+#  synchronize:  src={{ item }} dest=/root/owl_cvfsconf_backup/{{ansible_hostname }} mode=push rsync_opts="-e ssh"
+#  with_items:
+#    - "/astro/local/maint/config_backup/{{ ansible_hostname }}/fsnameservers"
+#    - "/astro/local/maint/config_backup/{{ ansible_hostname }}/fsforeignservers"
+
+- name: Copy StorNext fsforeignservers file
+#  template: src=stornext_fsforeignservers.j2 dest=/usr/cvfs/config/fsforeignservers owner=root group=root mode=0644
+  template: src={{ ansible_hostname }}/fsforeignservers dest=/usr/cvfs/config/fsforeignservers owner=root group=root mode=0644
+
+
+- debug: var=lanclient verbosity=2
+
+- name: Copy fsports file for lanclients
+#  template: src=stornext_fsforeignservers.j2 dest=/usr/cvfs/config/fsforeignservers owner=root group=root mode=0644
+  template: src=fsports dest=/usr/cvfs/config/fsports owner=root group=root mode=0644
+  when: ({{ lanclient }}) or ({{ lanclient2 }})
+
+- name: Create mount points for the StorNext filesystems
+  shell: "mkdir -p /mn/xsan/d1; chmod 777  /mn/xsan/d1; mkdir -p /mn/stornext/{u3,d{1..11}}; chmod 777  /mn/stornext/{u3,d{1..11}}"
+#  when: {{ standard_fstab }}
+
+- name: Create mount points for the StorNext filesystems on owl17-7
+  shell: "mkdir -p /mn/stornext/d{1..11}; mkdir -p /mn/xsan/u1; chmod 777 /mn/stornext/d{1..11}; chmod 777 /mn/xsan/u1"
+  when: "{{ lanclient2 }}" 
+
+- name: Update fstab to mount the disks with correct dependencies
+#  lineinfile: line="{{ lookup('file', '/astro/local/maint/downloads/StorNext/fstab') }}" dest=/etc/fstab
+  lineinfile: line="{{ lookup('file', '/etc/ansible/ansible/ita/roles/stornext_fc_inst/templates/fstab') }}" dest=/etc/fstab
+  when: "{{ standard_fstab }}"
+
+- name: Update fstab to mount the disks with correct dependencies
+#  lineinfile: line="{{ lookup('file', '/astro/local/maint/downloads/StorNext/fstab') }}" dest=/etc/fstab
+  lineinfile: line="{{ lookup('file', '/etc/ansible/ansible/ita/roles/stornext_fc_inst/templates/fstab_charybdis') }}" dest=/etc/fstab
+  when: "{{ charybdis }}"
+
+- name: Update fstab to mount the disks with correct dependencies
+#  lineinfile: line="{{ lookup('file', '/astro/local/maint/downloads/StorNext/fstab') }}" dest=/etc/fstab
+  lineinfile: line="{{ lookup('file', '/etc/ansible/ansible/ita/roles/stornext_fc_inst/templates/fstab_beehive') }}" dest=/etc/fstab
+  when: "{{ beehive }}"
+
+- name: Update fstab to mount the disks with correct dependencies for lanclient owl1-6
+#  lineinfile: line="{{ lookup('file', '/astro/local/maint/downloads/StorNext/fstab') }}" dest=/etc/fstab
+  lineinfile: line="{{ lookup('file', '/etc/ansible/ansible/ita/roles/stornext_fc_inst/templates/fstab_lanclients') }}" dest=/etc/fstab
+  when: "{{ lanclient }}"
+
+- name: Update fstab to mount the disks with correct dependencies for lanclients owl16-7
+#  lineinfile: line="{{ lookup('file', '/astro/local/maint/downloads/StorNext/fstab') }}" dest=/etc/fstab
+  lineinfile: line="{{ lookup('file', '/etc/ansible/ansible/ita/roles/stornext_fc_inst/templates/fstab_lanclients2') }}" dest=/etc/fstab
+  when: "{{ lanclient2 }}"
+
+
+- name: Enable IPV6 on LO AFTER installation and restart SSHD to avoid any X forwarding issues
+  shell: sed -ri '/net.ipv6.conf.lo.disable_ipv6.* d/' /etc/sysctl.conf; sysctl -p; systemctl restart sshd
+
+- name: SysV Service start cvfs service
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+   - cvfs
+
+
+
+

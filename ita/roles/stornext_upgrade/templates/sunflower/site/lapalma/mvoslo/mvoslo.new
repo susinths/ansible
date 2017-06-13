@@ -1,0 +1,44 @@
+#!/bin/csh -f
+#
+#   creates script files for transfer of data using rsync
+#   with 10 parallel processes. Simple script using
+#   unix commands to find files. The files are split with
+#   equal numbers of files to each subprocess with no regard
+#   to the sizes
+#   syntax:
+#   mvoslo date
+#
+
+set local_disk=/data/disk2/TCD/
+set date=$1
+if ($date == "") then
+  echo -n "Give data (e.g. 2011.09.15: "
+  set date=($<)
+endif
+set local_path=${local_disk}/${date}/
+
+\rm rsync_* # remove old rsync files
+
+echo "Searching for directories in "${local_path}
+find ${local_path} -type d -print | sed -e 's"//"/"' | sed -e "s'${local_disk}''" >! rsync_dfile.txt
+echo "#\!/bin/csh -f" >! rsync.csh
+echo 'echo -n "Type password: "' >> rsync.csh
+echo ' setenv RSYNC_PASSWORD $<' >> rsync.csh
+echo 'route add sunflower.uio.no gw gate dev eth2' >> rsync.csh
+echo 'rsync -ult --port=2021 --files-from=rsync_dfile.txt . ita@sunflower.uio.no::itatransport/ &' >> rsync.csh
+
+# find files
+echo "Searching for files in "${local_path}
+find ${local_path} -type f -print | sed -e 's"//"/"' | sed -e "s'${local_disk}''" >! rsync_files.txt
+cat -n rsync_files.txt >! a.tmp     # number the lines
+foreach n (0 1 2 3 4 5 6 7 8 9)
+  grep "^[ 0-9]*${n}[^0-9]" a.tmp >! b.tmp
+#  cut -c8-1000 b.tmp >! rsync_${n}.txt
+#  cut -d/ -f2- b.tmp >! rsync_${n}.txt
+  awk '{ print $2}' < b.tmp >! rsync_${n}.txt
+  echo "rsync -ultp --port=2021 --files-from=rsync_${n}.txt . ita@sunflower.uio.no::itatransport/ &" >> rsync.csh
+end
+\rm a.tmp b.tmp
+chmod +x rsync.csh
+./rsync.csh
+

@@ -1,0 +1,14 @@
+
+- name: Register the StorNext client software RPM to install
+#  shell: "ls /astro/local/maint/ansible/StorNext_5.3.2/"
+  shell: ls *.rpm chdir=/astro/local/maint/ansible/StorNext_5.3.2/
+  register: stornext_rpms
+
+#- debug: var="{{ stornext_rpms.stdout.lines }}"
+- debug: var="{{ metadata_nic }}" verbosity=2
+
+#- name: Install the StorNext client software
+#  yum: name={{ item }} state=present
+#  with_items: "{{ stornext_rpms.stdout_lines }}"
+#  ignore_errors: yes
+ 

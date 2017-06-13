@@ -1,0 +1,9 @@
+dateformat 1
+skipacl yes
+server stornext_02
+*
+domain /mn/stornext/d7/Planck1
+domain /mn/stornext/d10/SAM5
+domain /mn/stornext/d8/ITA2
+domain /mn/stornext/d8/ITA3
+domain /mn/stornext/d9

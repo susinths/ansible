@@ -1,0 +1,38 @@
+em1       Link encap:Ethernet  HWaddr 00:8C:FA:01:E3:E0  
+          inet addr:129.240.45.55  Bcast:129.240.45.255  Mask:255.255.255.0
+          inet6 addr: fe80::28c:faff:fe01:e3e0/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:14775050019 errors:37 dropped:0 overruns:86326 frame:20
+          TX packets:4147894685 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:21736915822236 (19.7 TiB)  TX bytes:4388614865661 (3.9 TiB)
+          Memory:dd760000-dd780000 
+
+em2       Link encap:Ethernet  HWaddr 00:8C:FA:01:E3:E1  
+          inet addr:192.168.1.55  Bcast:192.168.31.255  Mask:255.255.224.0
+          inet6 addr: fe80::28c:faff:fe01:e3e1/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:152465433 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:180426818 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:23414039828 (21.8 GiB)  TX bytes:18181792522 (16.9 GiB)
+          Memory:dd7e0000-dd800000 
+
+ib0       Link encap:InfiniBand  HWaddr 80:00:00:03:FE:80:00:00:00:00:00:00:00:00:00:00:00:00:00:00  
+          inet addr:192.168.100.55  Bcast:192.168.100.255  Mask:255.255.255.0
+          inet6 addr: fe80::211:7500:77:43c0/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:65520  Metric:1
+          RX packets:88 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:17 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:256 
+          RX bytes:4928 (4.8 KiB)  TX bytes:1176 (1.1 KiB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:186133238 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:186133238 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:2732252956327 (2.4 TiB)  TX bytes:2732252956327 (2.4 TiB)
+

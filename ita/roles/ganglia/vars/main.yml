@@ -1,0 +1,4 @@
+ganglia_clustername: beehive
+#ganglia_master: "charybdis1"
+ganglia_hostname: '{{ ganglia_clustername }}.uio.no'
+ganglia_masters: ["hercules","euclid","owl", "navi", "charybdis1", "beehive"]

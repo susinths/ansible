@@ -1,0 +1,6 @@
+Planck1                 /mn/stornext/d1         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA2                    /mn/stornext/d3         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ISP1                    /mn/stornext/d5         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+u3                      /mn/stornext/u3         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA4                    /mn/stornext/d7         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA5                    /mn/stornext/d8         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0

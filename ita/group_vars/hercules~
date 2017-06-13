@@ -1,0 +1,17 @@
+new_disk: '/dev/sdb'
+create_vgname: 'datavg'
+create_lvname: 'd1'
+create_lvsize: '+100%FREE'
+filesystem: 'xfs'
+owner_user: 'osdcapps'
+owner_group: 'astrosdc'
+
+
+
+
+
+
+
+
+
+

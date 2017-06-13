@@ -1,0 +1,42 @@
+em1       Link encap:Ethernet  HWaddr C8:1F:66:DE:22:A8  
+          inet addr:129.240.45.106  Bcast:129.240.45.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:4882816644 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:829960383 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:6737408875182 (6.1 TiB)  TX bytes:199362292564 (185.6 GiB)
+          Interrupt:34 Memory:d5000000-d57fffff 
+
+em2       Link encap:Ethernet  HWaddr C8:1F:66:DE:22:AA  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+          Interrupt:36 Memory:d6000000-d67fffff 
+
+em3       Link encap:Ethernet  HWaddr C8:1F:66:DE:22:AC  
+          inet addr:192.168.1.106  Bcast:192.168.7.255  Mask:255.255.248.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:157712465 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:183114445 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:24016637695 (22.3 GiB)  TX bytes:19131506415 (17.8 GiB)
+          Interrupt:36 Memory:d7000000-d77fffff 
+
+em4       Link encap:Ethernet  HWaddr C8:1F:66:DE:22:AE  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+          Interrupt:37 Memory:d8000000-d87fffff 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:77008677 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:77008677 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:137681473065 (128.2 GiB)  TX bytes:137681473065 (128.2 GiB)
+

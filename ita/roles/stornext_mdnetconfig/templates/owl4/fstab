@@ -1,0 +1,26 @@
+
+#
+# /etc/fstab
+# Created by anaconda on Thu Jan 24 12:33:22 2013
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+/dev/mapper/internvg-root /                       ext4    defaults        1 1
+UUID=1fa4c50b-e76b-439b-9f1a-ea750137eef2 /boot                   ext4    defaults        1 2
+/dev/mapper/internvg-opt /opt                    ext4    defaults        1 2
+/dev/mapper/internvg-tmp /tmp                    ext4    defaults        1 2
+/dev/mapper/internvg-usr /usr                    ext4    defaults        1 2
+/dev/mapper/internvg-var /var                    ext4    defaults        1 2
+/dev/mapper/internvg-swap swap                    swap    defaults        0 0
+tmpfs                   /dev/shm                tmpfs   defaults        0 0
+devpts                  /dev/pts                devpts  gid=5,mode=620  0 0
+sysfs                   /sys                    sysfs   defaults        0 0
+proc                    /proc                   proc    defaults        0 0
+alruba2:/mn/alruba2/astro /mn/alruba2/astro	nfs	nfsvers=3,rw,bg,hard,intr	0 0
+Planck1                 /mn/stornext/d1         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA2                    /mn/stornext/d3         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ISP1                    /mn/stornext/d5         cvfs    rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+u3			/mn/stornext/u3		cvfs	rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA4			/mn/stornext/d7         cvfs	rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0
+ITA5			/mn/stornext/d8         cvfs	rw,cachebufsize=512k,dircachesize=50m,diskproxy=client 0 0

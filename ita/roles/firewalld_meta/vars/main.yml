@@ -1,0 +1,8 @@
+firewalld_ifaces: [ 'ib0.8001' ]
+firewalld_zone_dmz: 'dmz'
+#firewalld_ifaces_zone: 'internal'
+
+#firewalld_iface1_zone: 'internal'
+
+#ganglia_clustername: hercules
+#ganglia_hostname: '{{ ganglia_clustername }}.uio.no'

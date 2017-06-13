@@ -1,0 +1,182 @@
+#
+# Copyright 1997-2014. Quantum Corporation. All Rights Reserved.
+# StorNext is either a trademark or registered trademark of
+# Quantum Corporation in the US and/or other countries.
+#
+######################################################################################
+# Copyright (c) 1997-2004
+#
+# This file contains information used by various SNSM capabilities.
+# In general each entry in the file will look like:
+#    <capabitlity> : <value>
+#
+# Each section further describes the specific entry syntax for each capability.
+# Additionally,  blank lines and lines beginnning with a # are ignored.
+#
+######################################################################################
+
+######################################################################################
+# This section list the files which will be added to the SNSM backups.
+# Each entry must have the following syntax or it will be ignored.
+#
+#   backup : <type> : <expresssion> 
+#   where
+#     type       - must be 'file', 'rename', [product]
+#     expression - can only be a single file name (foo) or path/*
+#
+#     If type is 'rename' then the files referenced by the specified expression
+#     will be copied to a new temporary file with .backup_ prefix.  The new file 
+#     will then be added to the SNSM backup.  When the backup processing is 
+#     complete the temporary file(s) will be removed.
+#
+#     If type is the product name, the specified expression will be backed up 
+#     only on that particular product.  The product name is compared against
+#     /usr/adic/install/.product
+#
+######################################################################################
+backup : file     : config/fsmlist
+backup : file     : config/fsnameservers
+backup : file     : config/objs.conf
+backup : file     : config/snpolicyd.conf
+backup : rename   : config/blockpool_config.txt
+backup : file     : /etc/exports
+backup : file     : /etc/samba/*
+backup : file     : data/*/config_history/*
+backup : file     : data/*/policy_config/*
+backup : file     : data/*/policy_history/*
+backup : rename   : config/license.dat
+backup : StorNext : config/.backup*
+backup : rename   : config/*.cfg
+backup : rename   : config/*.cfgx
+backup : vpenguin : config/*.cfg
+backup : vpenguin : config/cvlabels
+backup : rename   : config/*.opt
+backup : rename   : config/nss_cctl.xml
+backup : file     : config/ssl
+backup : file     : data/*/rep_reports/*
+backup : file     : data/*/quota_history/*
+backup : file     : /etc/multipath.conf
+
+######################################################################################
+# This section list the files which will be relocated to the shared file system
+# when SNSM is configured for high availability (HA). It also specifies
+# files which must be replicated on the active and standby servers.
+# Each entry must have the following syntax or it will be ignored.
+#
+#   failover : <type> : <expression>
+#   where
+#     type       - must be 'mirror' or 'shared' or 'hostdata'
+#                  mirror entries are replicated on HA servers. 
+#                  shared entries are relocated to shared filesystem 
+#                  hostdata entries copied to the shared filesystem to
+#                       a host-specific directory
+#     expression - can be a single file name (foo), 
+#                  or a file list ( foo*, *.foo, foo/* )
+######################################################################################
+failover : mirror : config/license.dat
+failover : mirror : config/fsmlist
+failover : mirror : config/fsnameservers
+failover : mirror : config/fsroutes
+failover : mirror : config/fsports
+failover : mirror : config/*.cfg
+failover : mirror : config/*.cfgx
+failover : mirror : config/*.opt
+failover : mirror : config/nss_cctl.xml
+failover : mirror : config/sngateway_config
+failover : mirror : config/snpolicyd.conf
+failover : mirror : config/objs.conf
+failover : mirror : config/blockpool_settings.txt
+failover : mirror : config/blockpool_root
+failover : mirror : config/blockpool_config.tmpl
+failover : mirror : config/blockpool_config.txt
+failover : mirror : config/ssl
+failover : mirror : config/quantum_disk_catalog.dat
+failover : shared : data/*/rep_reports
+failover : shared : data/*/quota_history
+failover : hostdata : config/dpserver*
+failover : hostdata : config/ha_peer
+failover : hostdata : config/ha_vip.txt
+failover : hostdata : config/ha_smith_interval
+failover : hostdata : debug/quantum_disk_license_report.xml
+
+################################################################################
+# This section list the files which are captured when a snapshot is taken
+# Each entry must have the following syntax or it will be ignored.
+#
+#   snapshot : <level> : <path> : <platform>
+#   where
+#     level      - must be the level number, 0 - 9
+#     path       - This should be an absolute pathname or a relative pathname
+#                  (when relative, it is relative to the top level install
+#                  dir, i.e. /usr/adic)
+#     platform   - (optional) one or more of:
+#                      G - Galaxy
+#                      L - non-Galaxy Linux
+#                      P - StorNext Appliance
+#                      S - Solaris
+#                  when absent, platform is assumed to be "all"
+#
+# NOTE: 1. You should list only a single path on each line.
+#       2. Wildcards are permitted.
+#
+################################################################################
+snapshot : 8 : DSM/data
+snapshot : 8 : DSM/config
+snapshot : 8 : DSM/config_history
+snapshot : 8 : DSM/label_history
+snapshot : 8 : DSM/debug
+snapshot : 8 : DSM/install/.ha_mgr
+snapshot : 8 : DSM/install/.SYNCHA*
+snapshot : 8 : /var/log/boot.* : L
+snapshot : 8 : /var/log/messages* : L
+snapshot : 8 : /var/log/blockpool_master.log : L
+snapshot : 8 : /var/adm/messages* : S
+snapshot : 8 : /etc/fstab : L
+snapshot : 8 : /etc/vfstab : S
+snapshot : 8 : /etc/exports : L
+snapshot : 8 : /etc/dfs/dfstab : S
+snapshot : 8 : /etc/hosts : LS
+snapshot : 8 : /etc/*release : L
+snapshot : 8 : /etc/samba : L
+snapshot : 8 : /etc/multipath.conf
+snapshot : 8 : /opt/quantum/snupdate/log/snupdate.log
+snapshot : 8 : /opt/quantum/snupdate/etc/snupdate.conf
+snapshot : 8 : /opt/quantum/snupdate/etc/pkg.list
+
+
+################################################################################
+# This section will list the commands to be run during snapshot
+# Each entry must have the following syntax.
+# 
+#    snap_cmnd : <level> : <command args> : <timeout value> : <platform>
+#    where
+#       level         - must be the level number, 0 - 9
+#       command args  - is any valid pathlight VX system command
+#       timeout value - is in minutes
+#       platform      - (optional) one or more of:
+#                         G - Galaxy
+#                         L - non-Galaxy Linux
+#                         P - StorNext Appliance
+#                         S - Solaris
+#                        when absent, platform is assumed to be "all"
+#
+################################################################################
+snap_cmnd : 8 : cvlabel -ls : 5
+snap_cmnd : 8 : hostname : 1 : LS
+snap_cmnd : 8 : ypcat hosts : 1 : LS
+snap_cmnd : 8 : ifconfig -a : 1 : LS
+snap_cmnd : 8 : netstat -rn : 1 : LS
+snap_cmnd : 8 : netstat -s : 1 : LS
+snap_cmnd : 8 : cat /proc/cpuinfo : 1 : L
+snap_cmnd : 8 : cat /proc/meminfo : 1 : L
+snap_cmnd : 8 : cat /proc/slabinfo : 1 : L
+snap_cmnd : 8 : cat /proc/modules : 1 : L
+snap_cmnd : 8 : cat /proc/mounts : 1 : L
+snap_cmnd : 8 : vmstat 2 5 : 1 : L
+snap_cmnd : 8 : ps axjf : 5 : L
+snap_cmnd : 8 : ps -lef : 5 : S
+snap_cmnd : 8 : uname -a : 1 : LS
+snap_cmnd : 8 : top -b -n 1 : 1 : L
+snap_cmnd : 8 : snpolicy_gather : 5 : L
+snap_cmnd : 8 : /opt/quantum/snupdate/bin/snupdate show info : 1 : L
+snap_cmnd : 8 : /opt/quantum/snupdate/bin/snupdate show versions : 1 : L

@@ -1,0 +1,3 @@
+ganglia_clustername: beehive
+#ganglia_master: "charybdis1"
+ganglia_hostname: '{{ ganglia_clustername }}.uio.no'

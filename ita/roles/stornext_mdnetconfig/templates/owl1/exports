@@ -1,0 +1,4 @@
+/mn/owl1/d1 @astro-hosts(rw,sync,insecure) @astro-pc-clients(rw,sync) @uio-felles(rw,sync)
+/mn/owl1/d2 @astro-hosts(rw,sync,insecure) @astro-pc-clients(rw,sync) @uio-felles(rw,sync)
+/mn/owl1/d3 @astro-hosts(rw,sync,insecure) @astro-pc-clients(rw,sync) @uio-felles(rw,sync)
+

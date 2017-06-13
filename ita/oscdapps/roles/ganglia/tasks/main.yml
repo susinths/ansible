@@ -1,0 +1,27 @@
+---
+# This role copies good Ganglia config too all Ganglia nodes (hercules*).
+
+
+#- name: Comment out udp_receive part 
+#  replace: dest=/etc/ganglia/gmond.conf  regexp=".*(mcast_join = 239.2.11.71)$" replace="#\\1"
+
+- name: Stop gmetad on receiver
+  service: name=gmetad state=stopped
+  when: ansible_hostname == "owl"
+
+#- name: Install Ganglia config file on receiver
+#  template: src=gmond_receiver.conf.j2 dest=/etc/ganglia/gmond.conf
+#  when: ansible_hostname == "owl"
+
+- name: Install Ganglia config file on senders
+  template: src=gmond_sender.conf.j2 dest=/etc/ganglia/gmond.conf
+  when: ansible_hostname != "owl"
+
+- name: Start gmond on nodes
+  service: name=gmond state=started enabled=yes
+#  when: ansible_hostname == "owl"
+
+- name: Start gmetad on master
+  service: name=gmetad state=started
+  when: ansible_hostname == "owl"
+

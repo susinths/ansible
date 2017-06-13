@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>momfbd</short>
+  <description>Momfbd manager</description>
+  <port protocol="tcp" port="5000"/>
+  <port protocol="udp" port="5000"/>
+  <port protocol="tcp" port="5002"/>
+  <port protocol="udp" port="5002"/>
+</service>

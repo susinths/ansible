@@ -1,0 +1,39 @@
+nohup: ignoring input
+IBM Tivoli Storage Manager
+Command Line Backup-Archive Client Interface
+  Client Version 6, Release 2, Level 2.0  
+  Client date/time: 02/23/2015 11:35:57
+(c) Copyright by IBM Corporation and other(s) 1990, 2010. All Rights Reserved.
+
+Node Name: STORNEXT.UIO.NO
+Session established with server TSM_02: Linux/x86_64
+  Server Version 6, Release 3, Level 4.300
+  Server date/time: 02/23/2015 11:35:57  Last access: 02/23/2015 11:19:40
+
+
+Incremental backup of volume '/mn/stornext/d4'
+ANS1228E Sending of object '/mn/stornext/d4/reduc/2014/2014-08-25/red/momfbd/08:43:26/6563/cfg/momfbdswp.000095' failed
+ANS4005E Error processing '/mn/stornext/d4/reduc/2014/2014-08-25/red/momfbd/08:43:26/6563/cfg/momfbdswp.000095': file not found
+ANS1228E Sending of object '/mn/stornext/d4/reduc/2014/2014-08-25/red/momfbd/08:43:26/6563/cfg/momfbdswp.000096' failed
+ANS4005E Error processing '/mn/stornext/d4/reduc/2014/2014-08-25/red/momfbd/08:43:26/6563/cfg/momfbdswp.000096': file not found
+
+ANS1809W A session with the TSM server has been disconnected. An attempt will be made to reestablish the connection.
+A Reconnection attempt will be made in 00:00:14 A Reconnection attempt will be made in 00:00:13 A Reconnection attempt will be made in 00:00:12 A Reconnection attempt will be made in 00:00:11 A Reconnection attempt will be made in 00:00:10 A Reconnection attempt will be made in 00:00:09 A Reconnection attempt will be made in 00:00:08 A Reconnection attempt will be made in 00:00:07 A Reconnection attempt will be made in 00:00:06 A Reconnection attempt will be made in 00:00:05 A Reconnection attempt will be made in 00:00:04 A Reconnection attempt will be made in 00:00:03 A Reconnection attempt will be made in 00:00:02 A Reconnection attempt will be made in 00:00:01 A Reconnection attempt will be made in 00:00:00 ... failed
+
+Total number of objects inspected: 60,595,189
+Total number of objects backed up:  511,175
+Total number of objects updated:          0
+Total number of objects rebound:          0
+Total number of objects deleted:          0
+Total number of objects expired:        256
+Total number of objects failed:           2
+Total number of bytes inspected:     108.20 TB
+Total number of bytes transferred:    1.05 TB
+Data transfer time:                13,724.34 sec
+Network data transfer rate:        82,483.37 KB/sec
+Aggregate data transfer rate:      8,218.17 KB/sec
+Objects compressed by:                    0%
+Total data reduction ratio:           99.03%
+Elapsed processing time:           38:15:47
+ANS1369E Session Rejected: The session was canceled by the server administrator.
+

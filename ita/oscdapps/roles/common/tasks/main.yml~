@@ -1,0 +1,68 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+###TODO NB!!! Copy/backup osdcapps  to alruba2 before reinstallation  DONE by Stein Vidar! ###
+
+- name: Install some packages  from std repo
+  yum: name={{ item }}  state=present
+  tags: lamp
+  with_items:
+  - httpd
+  - rsync
+  - php
+  - php-process
+  - php-mysqlnd
+  - gcc-c++ 
+  - gcc
+  - cmake
+  - libXp
+  - telnet
+  - net-tools
+  - unzip
+  - wget
+  - curl
+  - svn
+  - git
+  - libaio 
+  - libaio-devel
+  - ncurses
+  - ncurses-devel
+  - man-pages
+ 
+- name: Allow LDAP login of group astrosdc
+  lineinfile: dest=/etc/passwd line="+@astrosdc-core:x:::::"
+  
+- name: Allow LDAP login of osdcapps
+  lineinfile: dest=/etc/passwd line="+osdcapps:x::::/astro/{{ ansible_hostname }}/root/osdcapps/:/bin/tcsh"
+
+- name: Create a home directory for {{ owner_user }}
+  file: path=/astro/{{ ansible_hostname }}/root/{{ owner_user }} state=directory mode={{ mount_data_path_mode }} owner={{ owner_user }} group={{ owner_group }}
+
+# MOUNT acubens.uio.no:/mn/acubens/u1 ..
+- name: Mount acubens.uio.no:/mn/acubens/u1 to /net/acubens.uio.no/mn/acubens/u1
+  mount: name=/net/{{ server_acubens }}/{{ acubens_nfs_path }} src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted 
+
+#- name: Test Ansible {{ ansible_hostname }}
+#  template: src="hostname.txt" dest="/tmp"  
+
+###TODO: DONE! ### #TODO, create home dir in /astro/{{hostname}}/root/osdcapps  and semanage fcontext -a -e /home {{ path}} which is /astro/alnathdb/root/osdcapps
+#   semanage fcontext -a -e /home /astro/osdc-db/root/osdcapps
+#   restorecon -Rv /astro/osdc-db/root/osdcapps
+- name: Set correct SELinux context for /astro/{{ ansible_hostname }}/root/osdcapps
+  shell: /usr/sbin/semanage fcontext -a -e /home /astro/{{ ansible_hostname }}/root && /usr/sbin/restorecon -Rv /astro/{{ ansible_hostname }}/root
+  ignore_errors: yes
+
+- name: Enable and start services
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+   - httpd
+   - autofs
+
+- name: Open http service on firewalld
+  firewalld: service={{ item }} permanent=true state=enabled 
+  with_items:
+  -  http
+
+#IS THIS NEEDED? Done later in db_osdcapps at least!
+- name: Reload firewall rules
+  shell: /usr/bin/firewall-cmd --reload

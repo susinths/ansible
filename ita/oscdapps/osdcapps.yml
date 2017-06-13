@@ -1,0 +1,28 @@
+---
+# This playbook sets up some common stuff for the servers involved
+
+- name: Common set up for osdcapps servers
+#  hosts: osdcapps_fs:osdcapps_db
+  hosts: osdcapps_db
+  remote_user: root
+  roles:
+    - common
+
+- name: Osdcapps DB server specific setup 
+  hosts: osdcapps_db
+  remote_user: root
+  roles:
+#    - common
+    - db_osdcapps
+
+
+###TODO: some stuff now on FS###
+
+#- name: Osdcapps FS server specific setup 
+#  hosts: osdcapps_fs
+#  remote_user: root
+#  roles:
+#    - fs_osdcapps
+
+
+

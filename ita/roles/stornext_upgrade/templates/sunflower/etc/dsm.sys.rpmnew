@@ -1,0 +1,17 @@
+SErvername         xxx
+COMMmethod         TCPip
+TCPPort            xxx
+TCPServeraddress   xxx.uio.no
+*
+managedservices    schedule
+TXNBytelimit       25600
+schedmode          polling
+queryschedperiod   24
+passwordaccess     generate
+schedlogret        40 D
+errorlogret        40 D
+inclexcl           /etc/inclexcl
+schedlogname       /var/log/sched.log
+errorlogname       /var/log/dsmerror.log
+*
+virtualmount /etc

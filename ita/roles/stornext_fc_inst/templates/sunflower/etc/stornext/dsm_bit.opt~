@@ -1,0 +1,6 @@
+dateformat 1
+server stornext-kat
+skipacl yes
+*
+domain /mn/stornext/u2
+

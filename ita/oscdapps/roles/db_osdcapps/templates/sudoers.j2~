@@ -1,0 +1,5 @@
+steinhh ALL=NOPASSWD:/usr/bin/systemctl start rh-mariadb100-mariadb.service, /usr/bin/systemctl stop rh-mariadb100-mariadb.service, /usr/bin/systemctl restart rh-mariadb100-mariadb.service
+steinhh ALL=NOPASSWD:/usr/bin/systemctl start httpd, /usr/bin/systemctl restart httpd, /usr/bin/systemctl stop httpd
+steinhh ALL=(mysql) NOPASSWD: /usr/bin/tcsh
+
+susinths ALL=(mysql) NOPASSWD:  /bin/bash
