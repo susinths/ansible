@@ -1,9 +1,0 @@
----
-# Variables listed here are applicable to all host groups
-ganglia_clustername: 'hercules'
-ganglia_hostname: '{{ ganglia_clustername }}.uio.no'
-
-
-httpd_port: 80
-ntpserver: 192.168.1.2
-repository: https://github.com/bennojoy/mywebapp.git
