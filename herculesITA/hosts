@@ -14,7 +14,7 @@ nishtya
 [hercules_test]
 hercules2
 
-[hercules]
+[hercules_cluster]
 hercules
 hercules2
 hercules3
@@ -29,13 +29,35 @@ hercules11
 hercules12
 hercules13
 hercules14
-#hercules15
+hercules15
+[rhel7upd_master]
+procyon
+peacock
+alderamin
+ankaa
+alrescha
+alrami
+aridif
+spica
+mothallah
+kitalpha
+rukbat
+sadalmelik
+corcaroli
+giedi
+antares
+castor
+sabik
+sothi
+bellatrix
+atria
+
 
 
 
 
 # Ex 1: Ungrouped hosts, specify before any group headers.
-
+[test1]
 green.example.com
 blue.example.com
 192.168.100.1

@@ -2,11 +2,20 @@
 # This playbook deploys the whole application stack in this site.  
 
 - name: apply common configuration to all nodes
-  hosts: hercules_test
+  hosts: hercules_cluster
   remote_user: root
 
   roles:
-    - common
+#    - common
+    
+- name: apply Ganglia config changes to all nodes
+  hosts: hercules_cluster
+  remote_user: root
+
+  roles:
+    - ganglia
+
+
 
 #- name: apply test 
 #  hosts: susinhosts
