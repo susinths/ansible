@@ -1,6 +1,0 @@
-u3                        /mn/stornext/u3         cvfs    rw,cachebufsize=512k,dircachesize=50m,x-systemd.requires=cvfs.service,x-systemd.after=snupdate.service,x-systemd.after=cvsbuild.service       0 0
-ITA4                      /mn/stornext/d7         cvfs    rw,cachebufsize=512k,dircachesize=50m,x-systemd.requires=cvfs.service,x-systemd.after=snupdate.service,x-systemd.after=cvsbuild.service       0 0
-ITA5                      /mn/stornext/d8         cvfs    rw,cachebufsize=513k,dircachesize=50m,x-systemd.requires=cvfs.service,x-systemd.after=snupdate.service,x-systemd.after=cvsbuild.service       0 0
-PSC1                      /mn/stornext/d9         cvfs    rw,cachebufsize=512k,dircachesize=50m,x-systemd.requires=cvfs.service,x-systemd.after=snupdate.service,x-systemd.after=cvsbuild.service       0 0
-PSC2                      /mn/stornext/d10        cvfs    rw,cachebufsize=512k,dircachesize=50m,x-systemd.requires=cvfs.service,x-systemd.after=snupdate.service,x-systemd.after=cvsbuild.service       0 0
-PSC3                      /mn/stornext/d11        cvfs    rw,cachebufsize=512k,dircachesize=50m,x-systemd.requires=cvfs.service,x-systemd.after=snupdate.service,x-systemd.after=cvsbuild.service       0 0
