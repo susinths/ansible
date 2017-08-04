@@ -68,6 +68,12 @@
   shell: /usr/bin/firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -o "{{ firewalld_ifaces_public_gpu_nodes }}" -p tcp -m tcp -m multiport --dports "{{ lcgateway_portrange }}" -m set --match-set {{ lcgateway_ipsetname }} dst -j REJECT
   when: ansible_hostname in euclid_gpu_nodes
 
+- name: Add direct rich rule to allow traffic between servers on sub network 129.240.45.0/24 
+  shell: /usr/bin/firewall-cmd --permanent --direct --add-rule  ipv4 filter INPUT 0 -s 129.240.45.0/24 -j ACCEPT
+
 - name: Finally reload firewalld 
   service: name=firewalld state=restarted
 
+
+
+#TODO: create inventory/assign to other groups eagle-eagle3 beehive24-phi-beehive25-phi  based on interface similariytes

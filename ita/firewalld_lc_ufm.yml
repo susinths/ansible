@@ -1,15 +1,10 @@
 ---
-# This playbook configures firewall ports for UFM
+# This playbook configures some custom firewall..
 
 - name: apply stornext_mdnetconfig to the nodes
-  hosts: beehive_cluster
-#  hosts: euclid_cluster:hercules_cluster
-#  hosts: susin_hosts
-#  hosts: stornext_meta
+  hosts: euclid_cluster:hercules_cluster:beehive_cluster 
   remote_user: root
   
   roles:
-    - firewalld_ufm
-    #    - common
-    #    - chrome
+    - firewalld_lc_ufm
     

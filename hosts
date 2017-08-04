@@ -54,7 +54,7 @@ canopus
 agastya
 kahinub
 aschere
-#arion
+arion
 gemma
 regulus
 sihor
@@ -156,16 +156,20 @@ thubandb
 acruxdb
 
 
-[mac_upd]
+[mac_desktop]
 #milwa
-#niagara
-#tuscan
+niagara
+tuscan
 #swaar
-#margil
-#topaz
-#tsugaru
-#ladypink
+margil
+topaz
+tsugaru
+ladypink
 black
+opal 
+#pixie
+wolf
+mairac
 
 [cvfs_hosts]
 enir
@@ -254,8 +258,9 @@ owl28
 algol
 enir
 [susin_hosts]
+electra2
 #nishtya
-euclid3
+#euclid3
 
 
 [chrome]
@@ -296,7 +301,7 @@ alker
 algol
 shaula
 karbana
-enir
+#enir
 betelgeuse
 
 
@@ -312,7 +317,7 @@ spica
 mothallah
 kitalpha
 rukbat
-## sadalmelik autofs.service fix from Trond@USIT being tested on this from 30.06.2016. Removed 1.07 since the fix didn't work.
+sadalmelik #autofs.service fix from Trond@USIT being tested on this from 30.06.2016. Removed 1.07 since the fix didn't work.
 sadalmelik
 corcaroli
 giedi
@@ -346,6 +351,13 @@ beehive13
 beehive14
 beehive15
 beehive16
+beehive17
+beehive18
+beehive19
+beehive20
+beehive21
+beehive22
+beehive23
 
 
 [hercules_cluster]
@@ -363,7 +375,7 @@ hercules11
 hercules12
 hercules13
 hercules14
-#hercules15 #IB NOT READY FOR FIREWALL ZONE ADJUSTMENT
+hercules15 #IB NOT READY FOR FIREWALL ZONE ADJUSTMENT
 
 
 [osdcapps_servers]
