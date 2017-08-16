@@ -34,22 +34,12 @@
   lineinfile: dest=/etc/passwd line="+@astrosdc-core:x:::::"
   
 - name: Allow LDAP login of osdcapps
-  lineinfile: dest=/etc/passwd line="+osdcapps:x::::/astro/{{ ansible_hostname }}/{{ diskname  }}/{{ username }}/:/bin/tcsh"
+  lineinfile: dest=/etc/passwd line="+osdcapps:x::::/astro/{{ ansible_hostname }}/{{ datalv_name  }}/{{ user_osdcapps }}/:/bin/tcsh"
 
 #TODO mount acubens med lookupcache off etc
 # MOUNT acubens.uio.no:/mn/acubens/u1 ..
 - name: Mount acubens.uio.no:/mn/acubens/u1 to /net/acubens.uio.no/mn/acubens/u1
   mount: name=/net/{{ server_acubens }}/{{ acubens_nfs_path }} src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted 
-
-#- name: Test Ansible {{ ansible_hostname }}
-#  template: src="hostname.txt" dest="/tmp"  
-
-###TODO: DONE! ### #TODO, create home dir in /astro/{{hostname}}/d1/osdcapps  and semanage fcontext -a -e /home {{ path}} which is /astro/alna thdb/root/osdcapps
-#   semanage fcontext -a -e /home /astro/osdc-db/root/osdcapps
-#   restorecon -Rv /astro/osdc-db/root/osdcapps
-- name: Set correct SELinux context for /astro/{{ ansible_hostname }}//{{ diskname  }}/{{ username }}
-  shell: /usr/sbin/semanage fcontext -a -e /home /astro/{{ ansible_hostname }}//{{ diskname  }} && /usr/sbin/restorecon -Rv /astro/{{ ansible_hostname }}//{{ diskname  }}
-  ignore_errors: yes
 
 - name: Enable and start services
   service: name={{ item }} state=started enabled=yes

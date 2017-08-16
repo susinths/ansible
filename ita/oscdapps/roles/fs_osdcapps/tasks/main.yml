@@ -20,7 +20,6 @@
 - name: Create a home directory for {{ user_osdcapps }} (osdcapps)
   file: path=/astro/{{ ansible_hostname }}//{{ datalv_name  }}/{{ user_osdcapps }} state=directory mode={{ mount_data_path_mode }} owner={{ user_osdcapps }} group={{ groups_osdcapps }}
 
-#   semanage fcontext -a -e /home /astro/osdc-db/d1/osdcapps &&  restorecon -Rv /astro/osdc-db/d1/osdcapps
 - name: Set correct SELinux context for /astro/{{ ansible_hostname }}/{{ datalv_name }}/{{ user_osdcapps }}
   shell: /usr/sbin/semanage fcontext -a -e /home /astro/{{ ansible_hostname }}/{{ datalv_name }}/{{ user_osdcapps }} && /usr/sbin/restorecon -Rv /astro/{{ ansible_hostname }}/{{ datalv_name }}/{{ user_osdcapps }}
 
