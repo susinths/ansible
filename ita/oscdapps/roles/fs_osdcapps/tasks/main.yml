@@ -35,7 +35,7 @@
   when: ansible_hostname in sdc_fsservers
 
 - name: Enable & start NFS service
-  service: name=fs-server.service state=started enabled=yes
+  service: name=nfs-server.service state=started enabled=yes
   when: ansible_hostname in sdc_fsservers
   ignore_errors: yes
 
