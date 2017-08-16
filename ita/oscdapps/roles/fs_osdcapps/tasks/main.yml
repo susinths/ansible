@@ -14,8 +14,8 @@
 - name: Mount the LV 
   mount: name=/astro/{{ ansible_hostname }}//{{ datalv_name }} src=/dev/mapper/{{ datavg }}-{{ datalv_name }} fstype={{ filesystem }} state=present
 
-- name: Create a home directory for {{ user_sdc }} (sdc)
-  file: path=/astro/{{ ansible_hostname }}//{{ datalv_name  }}/{{ user_sdc}} state=directory mode={{ mount_data_path_mode }} owner={{ user_sdc }} group={{ group_sdc }}
+- name: Create a directory {{ user_sdc }} in /astro/{{ ansible_hostname }}//{{ datalv_name  }}
+  file: path=/astro/{{ ansible_hostname }}//{{ datalv_name  }}/{{ user_sdc}} state=directory mode={{ mount_data_path_mode }} owner={{ user_osdcapps }} group={{ group_osdcapps }}
 
 - name: Create a home directory for {{ user_osdcapps }} (osdcapps)
   file: path=/astro/{{ ansible_hostname }}//{{ datalv_name  }}/{{ user_osdcapps }} state=directory mode={{ mount_data_path_mode }} owner={{ user_osdcapps }} group={{ groups_osdcapps }}
