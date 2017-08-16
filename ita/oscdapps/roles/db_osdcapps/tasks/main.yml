@@ -54,45 +54,6 @@
 
 #susinths ALL=(mysql) NOPASSWD:  /bin/bash
 
-#TODO umask 0022 on alnathdb that causes effective r-xr--r-- for steinhh e.g /etc/opt/rh/rh-mariadb100/my.cnf.d/
-- name: Set ACL permissions to steinhh & osdcapps for div paths #1
-#setfacl -R -m u:steinhh:rwx  /etc/opt/rh/rh-mariadb100/my.cnf.d/ /etc/httpd/conf  # does this work with 2 dirs? #OK
-#setfacl -Rd -m  u:steinhh:rwx  /etc/opt/rh/rh-mariadb100/my.cnf.d/ #OK
-#setfacl -R -m u:steinhh:rx,u:osdcapps:rx  /var/log/httpd #OK
-#setfacl -R -m u:steinhh:rwx,u:osdcapps:rwx  /var/www/html #OK
-# setfacl -Rd -m u:steinhh:rwx,u:osdcapps:rwx  /var/www/html # OK
-  acl: name={{ item.path }} entity={{ item.username }} permissions=rwx etype=user state=present recursive=yes 
-  with_items:
-  - { path: '/etc/opt/rh/rh-mariadb100/my.cnf.d', username: 'steinhh' }
-  - { path: '/etc/httpd/conf', username: 'steinhh' }  
-  - { path: '/var/www/html', username: 'steinhh' }
-  - { path: '/var/www/html', username: 'osdcapps' }
-  - { path: '/etc/php.ini', username: 'steinhh' }  
-  ignore_errors: yes
-
-### TODO same as above, but with defaut=yes ###
-
-- name : Set ACL permissions #2   
-  acl: name={{ item.path }} entity={{ item.username }} permissions=rx etype=user state=present recursive=yes default=no
-  with_items:
-  - { path: '/var/log/httpd', username: 'steinhh' }
-  - { path: '/var/log/httpd', username: 'osdcapps' }
-  ignore_errors: yes
-  
-
-### TODO same as above, but with defaut=yes ###
-
-#Apache read from NFS mounts & send mail
-# semanage boolean -m --on  httpd_use_nfs
-# semanage boolean -m --on  httpd_can_sendmail
-- name: Configure SELinux to allow httpd to use NFS and send mail
-  seboolean: name={{ item }} state=true persistent=yes 
-  with_items:
-  - httpd_use_nfs
-  - httpd_can_sendmail
-  - rsync_full_access
-#  when: sestatus.rc != 0
-
 #chown -R /var/opt/rh.../mysql mysql:mysql
 - name: Make sure 'mysql' owns  {{ mariadb10_datadir}}
   file: path={{ mariadb10_datadir }} owner=mysql group=mysql mode="u=rwx,g=rx,o=rx" 
@@ -138,6 +99,13 @@
   - osdc-php
   - rsync
 
+- name: Set ACL permissions to steinhh & osdcapps for div paths #1
+  acl: name={{ item.path }} entity={{ item.username }} permissions=rwx etype=user state=present recursive=yes 
+  with_items:
+  - { path: '/etc/opt/rh/rh-mariadb100/my.cnf.d', username: 'steinhh' }
+  ignore_errors: yes
+
+
 #TODO # mkdir -p  /usr/local/mysql && chown steinhh:  /usr/local/mysql
 - name: Create /usr/local/mysql with the owner steinhh
   file: path=/usr/local/mysql/lib state=directory force=yes owner=steinhh group=steinhh
@@ -154,6 +122,9 @@
   file: src=/usr/local/mysql/lib/{{ item }} dest=/lib64/{{ item }} state=link force=yes
   with_items:
   - libengine_tools.so 
+
+
+
 
 
 # /lib64/libengine_tools.so -> /usr/local/mysql/lib/libengine_tools.so
