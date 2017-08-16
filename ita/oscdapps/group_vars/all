@@ -1,5 +1,10 @@
 ---
 # Variables listed here are applicable to all host groups
+datapv_disk:"/dev/sdb"
+datavg: "datavg"
+datalv_name: "d1"
+datalv_size: "100%FREE"
+
 new_disk: '/dev/vdb'
 default_vgname: 'internvg'
 fs_lvsize: '10G'
@@ -7,13 +12,17 @@ create_vgname: 'datavg'
 create_lvname: 'd1'
 create_lvsize: '+100%FREE'
 filesystem: 'xfs'
-owner_user: 'osdcapps'
-owner_group: 'astrosdc'
+usergroup: 'astrosdc'
 #mount_data_path: '/astro//{{ create_lvname }}'
 mount_data_path_mode: '0755'
 server_acubens : 'acubens.uio.no'
 acubens_nfs_path : '/mn/acubens/u1'
-
+diskname  "d1"
+user_sdc: "sdc"
+user_osdcapps: "osdcapps"
+group_sdc: "sdc"
+group_odscapps: "osdcapps"
+sdc_fsservers: ["sdc-fs"]
 
 
 

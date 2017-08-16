@@ -162,14 +162,14 @@ niagara
 tuscan
 #swaar
 margil
-topaz
+#topaz
 tsugaru
-ladypink
-black
-opal 
+#ladypink
+#black
+#opal 
 #pixie
 wolf
-mairac
+#mairac
 
 [cvfs_hosts]
 enir
@@ -358,6 +358,12 @@ beehive20
 beehive21
 beehive22
 beehive23
+beehive24-phi
+beehive25-phi
+beehive26
+#beehive32-gpu
+#beehive33-gpu
+
 
 
 [hercules_cluster]

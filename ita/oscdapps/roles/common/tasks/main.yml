@@ -1,5 +1,5 @@
 ---
-# This playbook contains common plays that will be run on all nodes.
+# This playbook contains (common) plays that will be run on all (FS, DB, other type server) osdcapps nodes.
 
 ###TODO NB!!! Copy/backup osdcapps  to alruba2 before reinstallation  DONE by Stein Vidar! ###
 
@@ -34,11 +34,14 @@
   lineinfile: dest=/etc/passwd line="+@astrosdc-core:x:::::"
   
 - name: Allow LDAP login of osdcapps
-  lineinfile: dest=/etc/passwd line="+osdcapps:x::::/astro/{{ ansible_hostname }}/root/osdcapps/:/bin/tcsh"
+  lineinfile: dest=/etc/passwd line="+osdcapps:x::::/astro/{{ ansible_hostname }}/{{ diskname  }}/{{ username }}/:/bin/tcsh"
 
-- name: Create a home directory for {{ owner_user }}
-  file: path=/astro/{{ ansible_hostname }}/root/{{ owner_user }} state=directory mode={{ mount_data_path_mode }} owner={{ owner_user }} group={{ owner_group }}
 
+## Must be done AFTER mounting process of =/astro/{{ ansible_hostname }}//{{ diskname  }}
+- name: Create a home directory for {{ username }} (osdcapps)
+  file: path=/astro/{{ ansible_hostname }}//{{ diskname  }}/{{ username }} state=directory mode={{ mount_data_path_mode }} owner={{ username }} group={{ usergroup }}
+
+#TODO mount acubens med lookupcache off etc
 # MOUNT acubens.uio.no:/mn/acubens/u1 ..
 - name: Mount acubens.uio.no:/mn/acubens/u1 to /net/acubens.uio.no/mn/acubens/u1
   mount: name=/net/{{ server_acubens }}/{{ acubens_nfs_path }} src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted 
@@ -46,11 +49,11 @@
 #- name: Test Ansible {{ ansible_hostname }}
 #  template: src="hostname.txt" dest="/tmp"  
 
-###TODO: DONE! ### #TODO, create home dir in /astro/{{hostname}}/root/osdcapps  and semanage fcontext -a -e /home {{ path}} which is /astro/alnathdb/root/osdcapps
+###TODO: DONE! ### #TODO, create home dir in /astro/{{hostname}}/d1/osdcapps  and semanage fcontext -a -e /home {{ path}} which is /astro/alna thdb/root/osdcapps
 #   semanage fcontext -a -e /home /astro/osdc-db/root/osdcapps
 #   restorecon -Rv /astro/osdc-db/root/osdcapps
-- name: Set correct SELinux context for /astro/{{ ansible_hostname }}/root/osdcapps
-  shell: /usr/sbin/semanage fcontext -a -e /home /astro/{{ ansible_hostname }}/root && /usr/sbin/restorecon -Rv /astro/{{ ansible_hostname }}/root
+- name: Set correct SELinux context for /astro/{{ ansible_hostname }}//{{ diskname  }}/{{ username }}
+  shell: /usr/sbin/semanage fcontext -a -e /home /astro/{{ ansible_hostname }}//{{ diskname  }} && /usr/sbin/restorecon -Rv /astro/{{ ansible_hostname }}//{{ diskname  }}
   ignore_errors: yes
 
 - name: Enable and start services
