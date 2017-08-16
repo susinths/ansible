@@ -36,11 +36,6 @@
 - name: Allow LDAP login of osdcapps
   lineinfile: dest=/etc/passwd line="+osdcapps:x::::/astro/{{ ansible_hostname }}/{{ diskname  }}/{{ username }}/:/bin/tcsh"
 
-
-## Must be done AFTER mounting process of =/astro/{{ ansible_hostname }}//{{ diskname  }}
-- name: Create a home directory for {{ username }} (osdcapps)
-  file: path=/astro/{{ ansible_hostname }}//{{ diskname  }}/{{ username }} state=directory mode={{ mount_data_path_mode }} owner={{ username }} group={{ usergroup }}
-
 #TODO mount acubens med lookupcache off etc
 # MOUNT acubens.uio.no:/mn/acubens/u1 ..
 - name: Mount acubens.uio.no:/mn/acubens/u1 to /net/acubens.uio.no/mn/acubens/u1
@@ -66,10 +61,5 @@
   firewalld: service={{ item }} permanent=true state=enabled 
   with_items:
   -  http
-
-#IS THIS NEEDED? Done later in db_osdcapps at least!
-- name: Reload firewall rules
-  shell: /usr/bin/firewall-cmd --reload
-
 
 # Line in file tcp and udp lockd port 4045.
