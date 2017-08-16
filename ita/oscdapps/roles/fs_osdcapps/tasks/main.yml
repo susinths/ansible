@@ -12,7 +12,7 @@
   file: path=/astro/{{ ansible_hostname }}/{{ datalv_name }} state=directory mode={{ mount_data_path_mode }} 
 
 - name: Mount the LV 
-  mount: name=/astro/{{ ansible_hostname }}//{{ datalv_name }} src=/dev/mapper/{{ datavg }}-{{ datalv_name }} fstype={{ filesystem }} state=present
+  mount: name=/astro/{{ ansible_hostname }}//{{ datalv_name }} src=/dev/mapper/{{ datavg }}-{{ datalv_name }} fstype={{ filesystem }} state=mounted
 
 - name: Create a directory {{ user_sdc }} in /astro/{{ ansible_hostname }}//{{ datalv_name  }}
   file: path=/astro/{{ ansible_hostname }}//{{ datalv_name  }}/{{ user_sdc}} state=directory mode={{ mount_data_path_mode }} owner={{ user_osdcapps }} group={{ group_osdcapps }}
