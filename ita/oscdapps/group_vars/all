@@ -1,34 +1,33 @@
 ---
 # Variables listed here are applicable to all host groups
-datapv_disk:"/dev/sdb"
+datapv_name: "/dev/sdb1"
 datavg: "datavg"
 datalv_name: "d1"
-datalv_size: "100%FREE"
-
+datalv_size: '100%FREE'
 new_disk: '/dev/vdb'
 default_vgname: 'internvg'
 fs_lvsize: '10G'
 create_vgname: 'datavg'
 create_lvname: 'd1'
-create_lvsize: '+100%FREE'
+create_lvsize: '100%FREE'
 filesystem: 'xfs'
 usergroup: 'astrosdc'
 #mount_data_path: '/astro//{{ create_lvname }}'
 mount_data_path_mode: '0755'
-server_acubens : 'acubens'
-domain_uio:"uio.no"
-acubens_nfs_path : '/mn/acubens/u1'
-diskname  "d1"
+server_acubens: 'acubens'
+domain_uio: "uio.no"
+acubens_nfs_path: '/mn/acubens/u1'
+diskname: "d1"
 user_sdc: "sdc"
+user_steinhh: "steinhh"
 user_osdcapps: "osdcapps"
-group_sdc: "sdc"
-group_odscapps: "osdcapps"
+group_sdc: "astrosdc"
+group_osdcapps: "astrosdc"
 sdc_fsservers: ["sdc-fs"]
+faculty_short: "mn"
+yum_pkgs_common: ["lsof", "strace", "httpd","rsync", "rsync", "php", "php-process", "php-mysqlnd", "gcc-c++ ", "gcc", "cmake", "libXp", "telnet", "net-tools", "unzip", "wget", "curl", "svn", "git", "libaio ", "libaio-devel", "ncurses", "ncurses-devel", "man-pages", "nfs-utils"]
+nfs_fw_services: ["lockd.xml", "mountd.xml", "rpc-bind.xml"]
 
-
-
-
-
-httpd_port: 80
-ntpserver: 192.168.1.2
-repository: https://github.com/bennojoy/mywebapp.git
+#httpd_port: 80
+#ntpserver: 192.168.1.2
+#repository: https://github.com/bennojoy/mywebapp.git

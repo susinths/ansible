@@ -121,7 +121,8 @@ owl23
 alnathdb
 
 [osdcapps_fs]
-osdc-fs
+#osdc-fs
+sdc-fs
 
 [hpc_4u_test]
 owl26
@@ -361,6 +362,12 @@ beehive23
 beehive24-phi
 beehive25-phi
 beehive26
+beehive27
+beehive28
+beehive29
+beehive30
+beehive31
+
 #beehive32-gpu
 #beehive33-gpu
 

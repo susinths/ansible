@@ -1,45 +1,19 @@
 ---
 # This playbook contains (common) plays that will be run on all (FS, DB, other type server) osdcapps nodes.
 
-###TODO NB!!! Copy/backup osdcapps  to alruba2 before reinstallation  DONE by Stein Vidar! ###
-
 - name: Install some packages from std repo
   yum: name={{ item }}  state=present
   tags: lamp
-  with_items:
-  - httpd
-  - rsync
-  - php
-  - php-process
-  - php-mysqlnd
-  - gcc-c++ 
-  - gcc
-  - cmake
-  - libXp
-  - telnet
-  - net-tools
-  - unzip
-  - wget
-  - curl
-  - svn
-  - git
-  - libaio 
-  - libaio-devel
-  - ncurses
-  - ncurses-devel
-  - man-pages
-  - nfs-utils
- 
-- name: Allow LDAP login of group astrosdc
+  with_items: "{{ yum_pkgs_common }}"
+  
+- name: Allow LDAP login of groubp astrosdc
   lineinfile: dest=/etc/passwd line="+@astrosdc-core:x:::::"
   
 - name: Allow LDAP login of osdcapps
   lineinfile: dest=/etc/passwd line="+{{ user_osdcapps }}:x::::/astro/{{ ansible_hostname }}/{{ datalv_name  }}/{{ user_osdcapps }}/:/bin/tcsh"
 
-###TODO mount acubens with lookupcache off etc
-# MOUNT acubens.uio.no:/mn/acubens/u1 ..
 - name: Mount acubens.uio.no:/mn/{{ server_acubens }}/{{ mountpoint_u1 }} to /net/{{ server_acubens }}.{{ domain_uio }}/mn/{{ server_acubens }}/u1
-  mount: name=/{{ faculty_short }}/{{ server_acubens }}/{{ acubens_nfs_path }} src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted opts="lookupcache=none" 
+  mount: name=/{{ faculty_short }}/{{ server_acubens }}/ src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted opts="lookupcache=none" 
 
 - name: Enable and start services
   service: name={{ item }} state=started enabled=yes
@@ -51,6 +25,7 @@
   firewalld: service={{ item }} permanent=true state=enabled 
   with_items:
   -  http
+
 ###TODO umask 0022 on alnathdb that causes effective r-xr--r-- for steinhh e.g /etc/opt/rh/rh-mariadb100/my.cnf.d/
 - name: Set ACL permissions to steinhh & osdcapps for div paths #1
   acl: name={{ item.path }} entity={{ item.username }} permissions=rwx etype=user state=present recursive=yes 
