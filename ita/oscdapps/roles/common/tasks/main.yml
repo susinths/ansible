@@ -3,7 +3,7 @@
 
 ###TODO NB!!! Copy/backup osdcapps  to alruba2 before reinstallation  DONE by Stein Vidar! ###
 
-- name: Install some packages  from std repo
+- name: Install some packages from std repo
   yum: name={{ item }}  state=present
   tags: lamp
   with_items:
@@ -34,15 +34,12 @@
   lineinfile: dest=/etc/passwd line="+@astrosdc-core:x:::::"
   
 - name: Allow LDAP login of osdcapps
-  lineinfile: dest=/etc/passwd line="+osdcapps:x::::/astro/{{ ansible_hostname }}/{{ datalv_name  }}/{{ user_osdcapps }}/:/bin/tcsh"
+  lineinfile: dest=/etc/passwd line="+{{ user_osdcapps }}:x::::/astro/{{ ansible_hostname }}/{{ datalv_name  }}/{{ user_osdcapps }}/:/bin/tcsh"
 
-- name: Allow LDAP login of osdcapps
-  lineinfile: dest=/etc/passwd line="+osdcapps:x::::/astro/{{ ansible_hostname }}/{{ datalv_name  }}/{{ user_osdcapps }}/:/bin/tcsh"
-
-#TODO mount acubens med lookupcache off etc
+###TODO mount acubens with lookupcache off etc
 # MOUNT acubens.uio.no:/mn/acubens/u1 ..
-- name: Mount acubens.uio.no:/mn/acubens/u1 to /net/acubens.uio.no/mn/acubens/u1
-  mount: name=/net/{{ server_acubens }}/{{ acubens_nfs_path }} src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted 
+- name: Mount acubens.uio.no:/mn/{{ server_acubens }}/{{ mountpoint_u1 }} to /net/{{ server_acubens }}.{{ domain_uio }}/mn/{{ server_acubens }}/u1
+  mount: name=/{{ faculty_short }}/{{ server_acubens }}/{{ acubens_nfs_path }} src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted opts="lookupcache=none" 
 
 - name: Enable and start services
   service: name={{ item }} state=started enabled=yes
@@ -54,7 +51,7 @@
   firewalld: service={{ item }} permanent=true state=enabled 
   with_items:
   -  http
-#TODO umask 0022 on alnathdb that causes effective r-xr--r-- for steinhh e.g /etc/opt/rh/rh-mariadb100/my.cnf.d/
+###TODO umask 0022 on alnathdb that causes effective r-xr--r-- for steinhh e.g /etc/opt/rh/rh-mariadb100/my.cnf.d/
 - name: Set ACL permissions to steinhh & osdcapps for div paths #1
   acl: name={{ item.path }} entity={{ item.username }} permissions=rwx etype=user state=present recursive=yes 
   with_items:
@@ -64,8 +61,6 @@
   - { path: '/etc/php.ini', username: "{{user_steinhh }}" }  
   ignore_errors: yes
 
-### TODO same as above, but with defaut=yes ###
-
 - name : Set ACL permissions #2   
   acl: name={{ item.path }} entity={{ item.username }} permissions=rx etype=user state=present recursive=yes default=no
   with_items:
@@ -73,7 +68,7 @@
   - { path: '/var/log/httpd', username: "{{ user_osdcapps }}" }
   ignore_errors: yes
   
-### TODO same as above, but with defaut=yes or check of default=yes can be used above ###
+###TODO same as above, but with defaut=yes or check of default=yes can be used above ###
 
 - name: Configure SELinux to allow httpd to use NFS and send mail
   seboolean: name={{ item }} state=true persistent=yes 
@@ -83,4 +78,4 @@
   - rsync_full_access
 #  when: sestatus.rc != 0
 
-### TODO Line in file tcp and udp lockd port 4045.
+###TODO Line in file tcp and udp lockd port 4045.

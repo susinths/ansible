@@ -40,7 +40,6 @@
   ignore_errors: yes
 
 # Firewall 
-
 - name: Add NFS service and restart firewalld
   firewalld: service={{ item }} permanent=true state=enabled
   with_items:

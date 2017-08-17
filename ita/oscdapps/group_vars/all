@@ -15,7 +15,8 @@ filesystem: 'xfs'
 usergroup: 'astrosdc'
 #mount_data_path: '/astro//{{ create_lvname }}'
 mount_data_path_mode: '0755'
-server_acubens : 'acubens.uio.no'
+server_acubens : 'acubens'
+domain_uio:"uio.no"
 acubens_nfs_path : '/mn/acubens/u1'
 diskname  "d1"
 user_sdc: "sdc"
