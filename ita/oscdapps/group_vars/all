@@ -27,6 +27,7 @@ sdc_fsservers: ["sdc-fs"]
 faculty_short: "mn"
 yum_pkgs_common: ["lsof", "strace", "httpd","rsync", "rsync", "php", "php-process", "php-mysqlnd", "gcc-c++ ", "gcc", "cmake", "libXp", "telnet", "net-tools", "unzip", "wget", "curl", "svn", "git", "libaio ", "libaio-devel", "ncurses", "ncurses-devel", "man-pages", "nfs-utils"]
 nfs_fw_services: ["lockd.xml", "mountd.xml", "rpc-bind.xml"]
+mountpoint_u1: "u1"
 
 #httpd_port: 80
 #ntpserver: 192.168.1.2

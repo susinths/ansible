@@ -13,7 +13,7 @@
   lineinfile: dest=/etc/passwd line="+{{ user_osdcapps }}:x::::/astro/{{ ansible_hostname }}/{{ datalv_name  }}/{{ user_osdcapps }}/:/bin/tcsh"
 
 - name: Mount acubens.uio.no:/mn/{{ server_acubens }}/{{ mountpoint_u1 }} to /net/{{ server_acubens }}.{{ domain_uio }}/mn/{{ server_acubens }}/u1
-  mount: name=/{{ faculty_short }}/{{ server_acubens }}/ src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted opts="lookupcache=none" 
+  mount: name=/{{ faculty_short }}/{{ server_acubens }}/{{ mountpoint_u1 }} src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted opts="lookupcache=none" 
 
 - name: Enable and start services
   service: name={{ item }} state=started enabled=yes
