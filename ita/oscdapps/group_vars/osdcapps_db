@@ -9,4 +9,4 @@ dbname: foodb
 upassword: abc
 
 #Susin
-mariadb10_datadir: /var/opt/rh/rh-mariadb100/lib/mysql
+#mariadb10_datadir: /var/opt/rh/rh-mariadb100/lib/mysql

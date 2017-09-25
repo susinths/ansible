@@ -6,7 +6,8 @@
 #  hosts: ganglia_owl
 #  hosts: euclid_cluster
 #  hosts: charybdis
-  hosts: beehive_cluster
+#  hosts: beehive_cluster
+  hosts: susin_hosts
   remote_user: root
 
   roles:

@@ -75,8 +75,8 @@ enir
 
 [guest_machines]
 sirius
-#aryaman
-#aphellar
+aryaman
+aphellar
 eques
 
 [srv_upgrades]
@@ -118,7 +118,8 @@ owl23
 
 [osdcapps_db]
 #osdc-db
-alnathdb
+#alnathdb
+sdc-db
 
 [osdcapps_fs]
 #osdc-fs
@@ -251,15 +252,16 @@ owl28
 
 
 [susin_test]
-#nishtya
+nishtya
 #owl2
 #owl3
 #tsih
 #sunflower
-algol
-enir
+
+
 [susin_hosts]
-electra2
+owl28
+#electra2
 #nishtya
 #euclid3
 
@@ -290,7 +292,7 @@ atria
 [rhel7_workstations]
 simal
 dubhe
-acubens
+#acubens  # Not a workstation, but server!
 ayil
 alnair
 adib
@@ -302,7 +304,7 @@ alker
 algol
 shaula
 karbana
-#enir
+enir
 betelgeuse
 
 
@@ -367,9 +369,8 @@ beehive28
 beehive29
 beehive30
 beehive31
-
-#beehive32-gpu
-#beehive33-gpu
+beehive32-gpu
+beehive33-gpu
 
 
 
@@ -626,26 +627,26 @@ spica.uio.no
 
 
 [euclid_cluster]
-euclid.uio.no
-euclid2.uio.no
-euclid3.uio.no
-euclid4.uio.no
-euclid5.uio.no
-euclid6.uio.no
-euclid7.uio.no
-euclid8.uio.no
-euclid9.uio.no
-euclid10.uio.no
-euclid11.uio.no
-euclid12.uio.no
-euclid13.uio.no
-euclid14.uio.no
-euclid15.uio.no
-euclid16.uio.no
-euclid17-gpu.uio.no
-euclid18-gpu.uio.no
-euclid19-gpu.uio.no
-euclid20-gpu.uio.no
+euclid
+euclid2
+euclid3
+euclid4
+euclid5
+euclid6
+euclid7
+euclid8
+euclid9
+euclid10
+euclid11
+euclid12
+euclid13
+euclid14
+euclid15
+euclid16
+euclid17-gpu
+euclid18-gpu
+euclid19-gpu
+euclid20-gpu
 euclid21
 
 

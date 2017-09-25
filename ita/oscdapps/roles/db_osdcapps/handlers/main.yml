@@ -2,12 +2,19 @@
 # Handler to handle common notifications. Handlers are called by other plays.
 # See http://docs.ansible.com/playbooks_intro.html for more information about handlers.
 
+- name: systemd daemon-reload
+  service:
+   name: 'daemon-reload'
+   state: 'reloaded'
+
+- name: restart firewalld
+  service:
+   name: firewalld
+   state: restarted
+
 - name: restart ntp
   service: name=ntpd state=restarted
 
 - name: restart iptables
   service: name=iptables state=restarted
 
-#Needs to be tested! 
-- name: systemd daemon_reload
-  shell: /usr/bin/systemctl daemon-reload && /usr/bin/systemctl reload rh-mariadb100-mariadb.service

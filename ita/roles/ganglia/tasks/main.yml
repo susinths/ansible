@@ -3,7 +3,7 @@
 
 - name: Install common packages
   yum: name={{ item }}  state=present
-  tags: Apache
+  tags: apache
   with_items:
    - ganglia	
    - ganglia-gmond
@@ -11,7 +11,7 @@
 
 - name: Install Apache for Ganglia master
   yum: name={{ item }}  state=present
-  tags: Apache
+  tags: apache
   with_items:
    - httpd
    - ganglia-gmetad

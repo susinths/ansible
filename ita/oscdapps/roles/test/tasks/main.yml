@@ -1,6 +1,31 @@
 ---
-#- include: install_httpd.yml
-#- include: copy_code.yml
+# This playbook contains common plays for setting up FS servers for osdcapps/Stein Vidar
 
-- name: Test Ansible hostname
-  template: src="hostname.txt" dest="/tmp" 
+- name: TEst register a variable for mount point
+  set_fact: fslv={{ item.mount}} fstype={{item.fstype}}
+  with_items: ansible_mounts
+  when: item.mount == "/"
+
+- debug: var=fslv
+- debug: var=fstype
+
+#- name: registering the mount point...
+#  debug: msg="Variable to hold the mount"
+#  with_item: ansible_mounts
+#  register: 
+
+###TODO don't try this if already mounted!
+- name: Create a new XFS filesystem on the LV
+  filesystem: fstype="xfs" dev="/dev/internvg/root" force=no 
+  with_items: ansible_mounts
+  ignore_errors: yes
+  when: fslv != "/"
+
+- name: Create the mount point
+  file: path=/astro/{{ ansible_hostname }}/{{ datalv_name }} state=directory mode={{ mount_data_path_mode }} 
+  when: fslv != "/
+ # when:  == "true"
+
+#- name: Mount the LV 
+#  mount: name=/astro/{{ ansible_hostname }}/{{ datalv_name }} src=/dev/mapper/{{ datavg }}-{{ datalv_name }} fstype={{ filesystem }} state=mounted
+#  when: fslv != "/astro/{{ ansible_hostname }}/{{ datalv_name }}"

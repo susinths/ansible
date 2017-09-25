@@ -10,7 +10,7 @@
   lineinfile: dest=/etc/passwd line="+@astrosdc-core:x:::::"
   
 - name: Allow LDAP login of osdcapps
-  lineinfile: dest=/etc/passwd line="+{{ user_osdcapps }}:x::::/astro/{{ ansible_hostname }}/{{ datalv_name  }}/{{ user_osdcapps }}/:/bin/tcsh"
+  lineinfile: dest=/etc/passwd line="+{{ user_osdcapps }}:x::::/astro/{{ ansible_hostname }}/{{ homefolder  }}/{{ user_osdcapps }}/:/bin/tcsh"
 
 - name: Mount acubens.uio.no:/mn/{{ server_acubens }}/{{ mountpoint_u1 }} to /net/{{ server_acubens }}.{{ domain_uio }}/mn/{{ server_acubens }}/u1
   mount: name=/{{ faculty_short }}/{{ server_acubens }}/{{ mountpoint_u1 }} src={{ server_acubens }}:{{ acubens_nfs_path }} fstype=nfs state=mounted opts="lookupcache=none" 
@@ -54,3 +54,19 @@
 #  when: sestatus.rc != 0
 
 ###TODO Line in file tcp and udp lockd port 4045.
+
+#- name: steinhh can manage Apache
+#  lineinfile: dest=/etc/sudoers state=present line="steinhh ALL=NOPASSWD:/usr/bin/systemctl start httpd, /usr/bin/systemctl restart httpd, /usr/bin/systemctl stop httpd, /usr/bin/systemctl reload httpd" validate: '/usr/sbin/visudo -cf %s'
+
+
+- name: steinhh can manage Apache..
+  blockinfile:
+    path: /etc/sudoers 
+    state: present 
+    marker: "#<!-- {mark} ANSIBLE MANAGED BLOCK -->#"
+    insertafter: "#includedir /etc/sudoers.d"
+    block: |
+      steinhh ALL=NOPASSWD:/usr/bin/systemctl start httpd, /usr/bin/systemctl restart httpd, /usr/bin/systemctl stop httpd, /usr/bin/systemctl reload httpd
+      steinhh ALL=(mysql) NOPASSWD: /usr/bin/tcsh
+      susinths ALL=(mysql) NOPASSWD:  /bin/bash
+#    validate: '/usr/sbin/visudo -cf %s'
