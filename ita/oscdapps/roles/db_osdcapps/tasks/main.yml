@@ -6,28 +6,24 @@
   tags: mariadb
   with_items: "{{ yum_pkgs_db }}"
 
-###TODO d1 should be 200G on sdc-db
-
-# Create a volume group on top of {{new_disk}} with physical extent size = 32MB. 
-#- name: Create new LVM VG 
-#  lvg:  vg={{ create_vgname }} pvs={{ new_disk }} pesize=32 state=present
-
-# Create a logical volume of full disk size of {{new_disk}}.
-#- name: Create LVM LV
-#  lvol: vg={{ create_vgname }} lv={{ create_lvname }} size={{ create_lvsize }}
-
 - name: register a variable for mount point
   set_fact: fsmd={{ item.mount }} fstype={{ item.fstype }}
   with_items: "{{ ansible_mounts }}"
   when: item.mount == mariadb10_datadir
 
+- name: register a variable for XFS check on /dev/{{ dbdisk }}
+  stat: path= /dev/{{ dbdisk }}
+  register: fsondbdisk
+
+- debug: var=fsondbdisk
 - debug: var=fsmd
 - debug: var=fstype
 
 - name: Create a new XFS filesystem on {{ dbdisk }}, avoid LVM usage due to performance reasons 
   filesystem: fstype={{ filesystem }} dev=/dev/{{ dbdisk }} force=no
-  when: fsmd != mariadb10_datadir
-  ignore_errors: yes
+# when: fsmd != mariadb10_datadir
+  when: fsondbdisk.stat.exists == True
+# ignore_errors: yes
 
 - name: Create home directory for osdcapps 
   file: path=/astro/{{ ansible_hostname }}/{{ homefolder }}/{{ user_osdcapps }} state=directory owner={{ user_osdcapps }} group={{ group_osdcapps }}   mode={{ mount_data_path_mode }} 
@@ -35,25 +31,19 @@
 # MOUNT d1 to MariaDB's datadir
 - name: Mount MariaDB\'s datadir 
   mount: name={{ mariadb10_datadir }} src=/dev/{{ dbdisk }} fstype={{ filesystem }} opts=noatime,nodiratime,nobarrier state=present
+  notify:
+    - restoresecontext
 
 - name: Make sure 'mysql' owns  {{ mariadb10_datadir}}
   file: path={{ mariadb10_datadir }} owner=mysql group=mysql mode="u=rwx,g=rx,o=rx" 
   ignore_errors: yes
 
-- name: steinhh can manage MariaDB ++
-  blockinfile:
-    path: /etc/sudoers 
-    state: present 
-    marker: "#<!-- {mark} ANSIBLE MANAGED BLOCK -->#"
-    insertafter: "#includedir /etc/sudoers.d"
-#    validate: '/usr/sbin/visudo -cf %s'
-    block: |
-      steinhh ALL=NOPASSWD:/usr/bin/systemctl start rh-mariadb100-mariadb.service, /usr/bin/systemctl stop rh-mariadb100-mariadb.service, /usr/bin/systemctl restart rh-mariadb100-mariadb.service 
-
-#TODO:  rwx for steinhh + mysql --plugin-dir=/opt/rh/rh-mariadb100/root/usr/lib64/mysql/plugin
-
 - name: change ulimit upper limits
   copy: src=templates/limit.js dest=/etc/security/limits.d/20-nproc.conf
+
+- name: Steinhh can manage MariaDB
+  template: src=templates/mariadb_steinhh.xml.j2 dest=/etc/sudoers.d/mariadb_steinhh force=no
+#  when: ansible_hostname in sdc_fsservers
 
 - name: Create /etc/systemd/system/rh-mariadb100-mariadb.service.d/
   file: path=/etc/systemd/system/rh-mariadb100-mariadb.service.d state=directory
@@ -102,9 +92,18 @@
   with_items:
   - libengine_tools.so 
 
+- name: Set correct SELinux context for /astro/{{ ansible_hostname }}/{{ fsdatalv }}/{{ user_osdcapps }}
+  shell: /usr/sbin/semanage fcontext -a -e /home /astro/{{ ansible_hostname }}/{{ fsdatalv }}/{{ user_osdcapps }} && /usr/sbin/restorecon -Rv /astro/{{ ansible_hostname }}/{{ fsdatalv }}/{{ user_osdcapps }}
+  ignore_errors: yes
+
+#Fixed with notify on mount
+#- name: Restorecontext for {{ mariadb10_datadir }}
+#  shell: /usr/sbin/restorecon -Rv {{ mariadb10_datadir }}
+#  ignore_errors: yes
+
 - name: Enable and start MariaDB service
   systemd: name={{ item }} state=started enabled=yes daemon_reload=yes
   with_items:
    - rh-mariadb100-mariadb.service
-
+  ignore_errors: yes
 

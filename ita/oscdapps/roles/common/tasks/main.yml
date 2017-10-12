@@ -58,15 +58,5 @@
 #- name: steinhh can manage Apache
 #  lineinfile: dest=/etc/sudoers state=present line="steinhh ALL=NOPASSWD:/usr/bin/systemctl start httpd, /usr/bin/systemctl restart httpd, /usr/bin/systemctl stop httpd, /usr/bin/systemctl reload httpd" validate: '/usr/sbin/visudo -cf %s'
 
-
-- name: steinhh can manage Apache..
-  blockinfile:
-    path: /etc/sudoers 
-    state: present 
-    marker: "#<!-- {mark} ANSIBLE MANAGED BLOCK -->#"
-    insertafter: "#includedir /etc/sudoers.d"
-    block: |
-      steinhh ALL=NOPASSWD:/usr/bin/systemctl start httpd, /usr/bin/systemctl restart httpd, /usr/bin/systemctl stop httpd, /usr/bin/systemctl reload httpd
-      steinhh ALL=(mysql) NOPASSWD: /usr/bin/tcsh
-      susinths ALL=(mysql) NOPASSWD:  /bin/bash
-#    validate: '/usr/sbin/visudo -cf %s'
+- name: Steinhh can manage Apache
+  template: src=templates/httpd_steinhh.xml.j2 dest=/etc/sudoers.d/httpd_steinhh force=no

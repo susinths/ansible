@@ -1,41 +1,51 @@
 ---
 # This playbook contains common plays for setting up FS servers for osdcapps/Stein Vidar
 
-- name: Create VG for FS data disk
-  lvg: vg={{ fsdatavg }} state=present pvs={{ fsdatapv }}
-
-- name: Create LVM LV for FS data disk
-  lvol: vg={{ fsdatavg }} lv={{ fsdatalv }} size={{ fsdatalv_size }} pvs={{ fsdatapv }} state=present
-  ignore_errors: yes
-
 - name: register a variable for mount point
   set_fact: fslv={{ item.mount }} fstype={{ item.fstype }}
   with_items: "{{ ansible_mounts }}"
   when: item.mount == "/astro/" ~ ansible_hostname ~ "/" ~ fsdatalv
 
+- name: register a variable for XFS check on /dev/{{ fsdatavg }}/{{ fsdatalv }}
+  stat: path=/dev/{{ fsdatavg }}/{{ fsdatalv }} 
+  register: fsondatalv
+#  when: item.mount == "/astro/" ~ ansible_hostname ~ "/" ~ fsdatalv
+
+- name: register a variable for vg check for {{ fsdatavg }}
+  stat: path=/dev/{{ fsdatavg }}
+  register: datavgexists
+
+- name: register a variable for lv check for {{ fsdatalv }}
+  stat: path=/dev/{{ fsdatavg }}/{{ fsdatalv }}
+  register: datalvexists
+
+- name: Create VG for FS data disk
+  lvg: vg={{ fsdatavg }} state=present pvs={{ fsdatapv }}
+  when: datavgexists.stat.exists == False
+
+- name: Create LVM LV for FS data disk
+  lvol: vg={{ fsdatavg }} lv={{ fsdatalv }} size={{ fsdatalv_size }} pvs={{ fsdatapv }} state=present
+  when: datalvexists.stat.exists == False
+
+- debug: var=datavgexists
+- debug: var=datalvexists
+- debug: var=fsondatalv
 - debug: var=fslv
 - debug: var=fstype
 
-#- name: registering the mount point...
-#  debug: msg="Variable to hold the mount"
-#  with_item: ansible_mounts
-#  register: 
-
-###TODO don't try this if already mounted!
 - name: Create a new XFS filesystem on the LV
   filesystem: fstype={{ filesystem }} dev=/dev/{{ fsdatavg }}/{{ fsdatalv }} force=no 
-  with_items: ansible_mounts
-  ignore_errors: yes
-  when: fslv != "/astro/" ~ ansible_hostname ~ "/" ~ fsdatalv
+  when: fsondatalv.stat.exists == True
 
 - name: Create the mount point
   file: path=/astro/{{ ansible_hostname }}/{{ fsdatalv }} state=directory mode={{ mount_data_path_mode }} 
-  when: fslv != "/astro/" ~ ansible_hostname ~ "/" ~ fsdatalv
+  when: fslv is not defined
+  ignore_errors: yes
  # when:  == "true"
 
 - name: Mount the LV 
   mount: name=/astro/{{ ansible_hostname }}/{{ fsdatalv }} src=/dev/mapper/{{ fsdatavg }}-{{ fsdatalv }} fstype={{ filesystem }} state=mounted
-  when: fslv != "/astro/" ~ ansible_hostname ~ "/" ~ fsdatalv
+  when: fslv is not defined
 
 - name: Create a directory {{ user_sdc }} in /astro/{{ ansible_hostname }}/{{ fsdatalv  }}
   file: path=/astro/{{ ansible_hostname }}/{{ fsdatalv  }}/{{ user_sdc}} state=directory mode={{ mount_data_path_mode }} owner={{ user_osdcapps }} group={{ group_osdcapps }}

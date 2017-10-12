@@ -1,6 +1,10 @@
 ---
 # Handler to handle common notifications. Handlers are called by other plays.
 # See http://docs.ansible.com/playbooks_intro.html for more information about handlers.
+- name: restoresecontext
+  shell: /usr/sbin/restorecon -Rv  {{ mariadb10_datadir }}
+  ignore_errors: yes
+
 
 - name: systemd daemon-reload
   service:

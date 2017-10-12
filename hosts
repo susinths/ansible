@@ -119,11 +119,12 @@ owl23
 [osdcapps_db]
 #osdc-db
 #alnathdb
-sdc-db
+astro-sdc-db
 
 [osdcapps_fs]
 #osdc-fs
-sdc-fs
+#sdc-fs
+astro-sdc-fs
 
 [hpc_4u_test]
 owl26
