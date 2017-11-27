@@ -16,8 +16,15 @@ usergroup: 'astrosdc'
 #mount_data_path: '/astro//{{ create_lvname }}'
 mount_data_path_mode: '0755'
 server_acubens: 'acubens'
+server_sdc_fs: 'sdc-fs'
+server_astro_sdc_fs: 'astro-sdc-fs'
+
+
 domain_uio: "uio.no"
 acubens_nfs_path: '/mn/acubens/u1'
+sdc_fs_nfs_path: "/astro/sdc-fs/d1"
+astro_sdc_fs_nfs_path: "/astro/astro-sdc-fs/d1"
+
 
 diskname: "d1"
 user_sdc: "sdc"
@@ -25,11 +32,18 @@ user_steinhh: "steinhh"
 user_osdcapps: "osdcapps"
 group_sdc: "astrosdc"
 group_osdcapps: "astrosdc"
-sdc_fsservers: ["sdc-fs"]
+sdc_fsservers: ["sdc-fs", "astro-sdc-fs"]
 faculty_short: "mn"
 yum_pkgs_common: ["lsof", "strace", "httpd","rsync", "rsync", "php", "php-process", "php-mysqlnd", "gcc-c++ ", "gcc", "cmake", "libXp", "telnet", "net-tools", "unzip", "wget", "curl", "svn", "git", "libaio ", "libaio-devel", "ncurses", "ncurses-devel", "man-pages", "nfs-utils"]
 nfs_fw_services: ["lockd.xml", "mountd.xml", "rpc-bind.xml"]
+sdc_fs_fw_services: ["sdc-fileserv.xml", "sdc-idl-request.xml", "sdc-idl-offer.xml"]
+srvhas_md0: ["sdc-db", "astro-sdc-db", "acruxdb"]
+
 mountpoint_u1: "u1"
+mountpoint_d1: "d1"
+
+institute_short: "astro"
+
 
 
 #DB related variables.
@@ -38,6 +52,6 @@ dbdisk: "md0"
 mariadb10_datadir: "/var/lib/mysql"
 yum_pkgs_db: ["rh-mariadb100", "rh-mariadb100-mariadb-devel.x86_64", "mariadb"]
 
-#httpd_port: 80
+#httpd_port: 80sdc-fileserv
 #ntpserver: 192.168.1.2
 #repository: https://github.com/bennojoy/mywebapp.git

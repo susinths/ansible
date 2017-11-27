@@ -35,19 +35,19 @@
   template: src=gmond_sender.conf.j2 dest=/etc/ganglia/gmond.conf
   when: ansible_hostname not in ganglia_masters
 
-- name: Add firewalld service definition for momfbd
-  template: src=momfbd.xml.j2 dest=/etc/firewalld/services/momfbd.xml
-  notify: 
-  - restart firewalld  ##Does not work, needs a separate reload? FIXED with flush_handler since notify are only run at end of the play
+#- name: Add firewalld service definition for momfbd
+#  template: src=momfbd.xml.j2 dest=/etc/firewalld/services/momfbd.xml
+#  notify: 
+#  - restart firewalld  ##Does not work, needs a separate reload? FIXED with flush_handler since notify are only run at end of the play
 
 - meta: flush_handlers  # This is needed to get the notify above effective at this point in the run!
 
-- name: Add momfbd custom firewall service and enable it
-  firewalld: service={{ item }} permanent=true state=enabled
-  with_items:
-  - momfbd
-  notify:
-  - restart firewalld
+#- name: Add momfbd custom firewall service and enable it
+#  firewalld: service={{ item }} permanent=true state=enabled
+#  with_items:
+#  - momfbd
+#  notify:
+#  - restart firewalld
 
 - name: Add firewalld service definition for Ganglia on master only
   template: src=ganglia.xml.j2 dest=/etc/firewalld/services/ganglia.xml
@@ -56,6 +56,22 @@
   when: ansible_hostname in ganglia_masters
 
 - meta: flush_handlers
+
+- name: Open firewall for all trafic to port 80/ganglia on zone {{ zone_public }} only on Ganglia masters
+  firewalld: zone={{ zone_public }} source={{ item }} permanent=true state=enabled #interface={{ }}
+  with_items:
+  - "0.0.0.0/0"
+  when:
+    ansible_hostname in ganglia_masters
+
+- name: Add httpd service to zone {{ zone_public }}
+  firewalld:  zone={{ zone_public }} service={{ http }} permanent=true state=enabled
+  when:
+    ansible_hostname in ganglia_masters
+
+###TODO add ganglia + httpd to internal zone
+
+
 
 - name: Add ganglia service to firewall on Ganglia master
   firewalld: service={{ item }} permanent=true state=enabled
@@ -108,8 +124,8 @@
 
 - name: Start gmetad on master
   service: name=gmetad state=started enabled=yes
-  notify:
-  - restart firewalld
+#  notify:
+#  - restart firewalld
   when: ansible_hostname in ganglia_masters
 
 - name: Start httpd on master

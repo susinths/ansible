@@ -76,10 +76,18 @@
   when: ansible_hostname in sdc_fsservers
   ignore_errors: yes
 
-# Firewall 
+# Firewall NFS 
 - name: Install NFS  firewalld  service (port) definitions
   template: src={{ item }}.j2 dest=/etc/firewalld/services/{{ item }} force=yes
   with_items: "{{ nfs_fw_services }}"
+  when: ansible_hostname in sdc_fsservers
+#  notify:
+#  - restart firewalld
+
+# Firewall SDC services 
+- name: Install SDC firewalld  service (port) definitions
+  template: src={{ item }}.j2 dest=/etc/firewalld/services/{{ item }} force=yes
+  with_items: "{{ sdc_fs_fw_services }}"
   when: ansible_hostname in sdc_fsservers
   notify:
   - restart firewalld
@@ -93,6 +101,15 @@
   - mountd
   - lockd
   - rpc-bind
+#  notify:
+#  - restart firewalld
+
+- name: Add SDC FS services and restart firewalld
+  firewalld: service={{ item }} permanent=true state=enabled
+  with_items:
+  - sdc-fileserv
+  - sdc-idl-offer
+  - sdc-idl-request
   notify:
   - restart firewalld
 

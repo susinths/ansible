@@ -58,9 +58,9 @@ arion
 gemma
 regulus
 sihor
-svati
+#svati
 rigil
-rastaban
+#rastaban
 alcor
 mirfak
 deneb
@@ -118,12 +118,16 @@ owl23
 
 [osdcapps_db]
 #osdc-db
-#alnathdb
+alnathdb
+thubandb
+acruxdb
 astro-sdc-db
+sdc-db
 
 [osdcapps_fs]
 #osdc-fs
-#sdc-fs
+#astro-ursafs
+sdc-fs
 astro-sdc-fs
 
 [hpc_4u_test]
@@ -253,12 +257,12 @@ owl28
 
 
 [susin_test]
-nishtya
+#nishtya
 #owl2
 #owl3
 #tsih
 #sunflower
-
+beehive2
 
 [susin_hosts]
 owl28
@@ -266,6 +270,8 @@ owl28
 #nishtya
 #euclid3
 
+[unnif_hosts]
+alpheratz
 
 [chrome]
 procyon
@@ -298,6 +304,21 @@ ayil
 alnair
 adib
 polaris
+svati
+rastaban
+propus
+alker
+hamal
+gemma
+unukalhai
+rasalgethi
+zedaron
+sirrah
+alperatz
+arion
+hadar
+
+
 
 
 [rhel7upd_phd]
@@ -394,11 +415,13 @@ hercules15 #IB NOT READY FOR FIREWALL ZONE ADJUSTMENT
 
 
 [osdcapps_servers]
-osdc-db
-osdc-fs
+sdc-db
+sdc-fs
+astro-sdc-db
+astro-sdc-fs
 alnathdb
 alnathfs
-astro-ursadb
+#astro-ursadb # phased out
 astro-ursafs
 acruxdb
 #elnath  #phased out!

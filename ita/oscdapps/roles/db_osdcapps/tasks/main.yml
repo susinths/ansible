@@ -12,7 +12,7 @@
   when: item.mount == mariadb10_datadir
 
 - name: register a variable for XFS check on /dev/{{ dbdisk }}
-  stat: path= /dev/{{ dbdisk }}
+  stat: path=/dev/{{ dbdisk }}
   register: fsondbdisk
 
 - debug: var=fsondbdisk
@@ -28,12 +28,13 @@
 - name: Create home directory for osdcapps 
   file: path=/astro/{{ ansible_hostname }}/{{ homefolder }}/{{ user_osdcapps }} state=directory owner={{ user_osdcapps }} group={{ group_osdcapps }}   mode={{ mount_data_path_mode }} 
 
-# MOUNT d1 to MariaDB's datadir
+# MOUNT {{ dbdisk }} to MariaDB's datadir
 - name: Mount MariaDB\'s datadir 
-  mount: name={{ mariadb10_datadir }} src=/dev/{{ dbdisk }} fstype={{ filesystem }} opts=noatime,nodiratime,nobarrier state=present
+  mount: path={{ mariadb10_datadir }} src=/dev/{{ dbdisk }} fstype={{ filesystem }} opts=noatime,nodiratime,nobarrier state=mounted
+  when: ansible_hostname in srvhas_md0
   notify:
     - restoresecontext
-
+    
 - name: Make sure 'mysql' owns  {{ mariadb10_datadir}}
   file: path={{ mariadb10_datadir }} owner=mysql group=mysql mode="u=rwx,g=rx,o=rx" 
   ignore_errors: yes
@@ -48,7 +49,6 @@
 - name: Create /etc/systemd/system/rh-mariadb100-mariadb.service.d/
   file: path=/etc/systemd/system/rh-mariadb100-mariadb.service.d state=directory
   ignore_errors: yes
-
 - name : Set MariaDB systemd service ulimit to 10K
   copy: src=templates/mariadb_systemd_limit.j2 dest=/etc/systemd/system/rh-mariadb100-mariadb.service.d/limits.conf  backup=yes  
 # notify: systemd daemon_reload   
@@ -57,7 +57,7 @@
 - name: Create custom firewall service definitions from template
   copy: src=templates/{{ item }} dest=/etc/firewalld/services/{{ item | basename | regex_replace('\.j2','') }} backup=yes
   with_items: 
-  - osdc-php.xml.j2
+  - sdc-patchserv.xml.j2
   - rsync.xml.j2
   notify:
     - restart firewalld
@@ -67,7 +67,7 @@
 - name: Add custom firewall services and enable them	     
   firewalld: service={{ item }} permanent=true state=enabled
   with_items:
-  - osdc-php
+  - sdc-patchserv
   - rsync
   notify:
     - restart firewalld
@@ -101,9 +101,33 @@
 #  shell: /usr/sbin/restorecon -Rv {{ mariadb10_datadir }}
 #  ignore_errors: yes
 
+- name: Create the mount point /astro/{{ server_sdc_fs }}/{{ mountpoint_d1 }} for certain DB servers
+  file: path="/astro/{{ server_sdc_fs }}/{{ mountpoint_d1 }}" state=directory mode="{{ mount_data_path_mode }}"
+  when:
+    ansible_hostname in ["sdc-db", "acruxdb"] 
+
+- name: Mount sdc-fs:/astro/{{ server_sdc_fs }}/{{ mountpoint_d1 }} to /astro/{{ server_sdc_fs }}/d1
+  mount: name="/{{ institute_short }}/{{ server_sdc_fs }}/{{ mountpoint_d1 }}" src={{ server_sdc_fs }}:{{ sdc_fs_nfs_path }} fstype=nfs state=mounted opts="local_lock=none,lookupcache=none" 
+  ignore_errors: true 
+  when:
+    ansible_hostname in ["sdc-db", "acruxdb"] 
+
+- name: Create the mount point /astro/{{ server_astro_sdc_fs }}/{{ mountpoint_d1 }} for certain DB servers
+  file: path="/astro/{{ server_astro_sdc_fs }}/{{ mountpoint_d1 }}" state=directory mode="{{ mount_data_path_mode }}"
+  when:
+    ansible_hostname in ["astro-sdc-db"]
+
+- name: Mount astro_sdc_fs:/astro/{{ server_astro_sdc_fs }}/{{ mountpoint_d1 }} to /astro/{{ server_astro_sdc_fs }}/d1
+  mount: name="/{{ institute_short }}/{{ server_astro_sdc_fs }}/{{ mountpoint_d1 }}" src={{ server_astro_sdc_fs }}:{{ astro_sdc_fs_nfs_path }} fstype=nfs state=mounted opts="local_lock=none,lookupcache=none" 
+  ignore_errors: true
+  when: 
+    ansible_hostname in ["astro-sdc-db"] 
+
 - name: Enable and start MariaDB service
   systemd: name={{ item }} state=started enabled=yes daemon_reload=yes
   with_items:
    - rh-mariadb100-mariadb.service
   ignore_errors: yes
+
+
 
