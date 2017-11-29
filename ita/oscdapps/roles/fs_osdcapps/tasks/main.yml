@@ -112,7 +112,16 @@
   - sdc-idl-request
   notify:
   - restart firewalld
-
   
+- name: Register a var to help check if the file already exists
+  stat: path={{ path_phpini }}
+  register: phpinifile
 
+- debug: var="phpinifile"
+
+- name: Permissions- steinhh can RW- to /etc/php.ini
+  acl: name={{ item.path }} entity={{ item.username }} permissions={{ item.perm}} etype=user state=present recursive=yes default=no
+  with_items:
+    - { path: "{{ path_phpini }}", username: "{{ user_steinhh }}", perm: "rw" }  
+  when:  phpinifile.stat.exists == True
 

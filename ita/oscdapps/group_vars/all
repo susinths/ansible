@@ -30,6 +30,7 @@ diskname: "d1"
 user_sdc: "sdc"
 user_steinhh: "steinhh"
 user_osdcapps: "osdcapps"
+user_apache: "apache"
 group_sdc: "astrosdc"
 group_osdcapps: "astrosdc"
 sdc_fsservers: ["sdc-fs", "astro-sdc-fs"]
@@ -41,9 +42,9 @@ srvhas_md0: ["sdc-db", "astro-sdc-db", "acruxdb"]
 
 mountpoint_u1: "u1"
 mountpoint_d1: "d1"
-
 institute_short: "astro"
-
+path_htpasswd: "/etc/httpd/conf/htpasswd"
+path_phpini: "/etc/php.ini"
 
 
 #DB related variables.
