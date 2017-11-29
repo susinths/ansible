@@ -77,8 +77,8 @@
 - debug: var="htpasswordfile"
 
 - name: Add the file /etc/httpd/conf/htpasswd 
-  file: path={{ path_htpasswd }} state=touch mode=u+rw
-  when: htpasswordfile.stat.exists == False
+  file: path={{ path_htpasswd }} state=touch mode="u+rw,g-rwx,o-rwx"
+#  when: htpasswordfile.stat.exists == False
 
 - name: Permissions- apache can R-- and steinhh RW- to /etc/httpd/conf/htpasswd 
   acl: name={{ item.path }} entity={{ item.username }} permissions={{ item.perm}} etype=user state=present recursive=yes default=no
