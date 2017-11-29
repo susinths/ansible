@@ -126,7 +126,7 @@ sdc-db
 
 [osdcapps_fs]
 #osdc-fs
-astro-ursafs
+#astro-ursafs
 sdc-fs
 astro-sdc-fs
 

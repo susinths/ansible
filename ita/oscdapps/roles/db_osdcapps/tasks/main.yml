@@ -5,6 +5,7 @@
   yum: name={{ item }}  state=present
   tags: mariadb
   with_items: "{{ yum_pkgs_db }}"
+  when: ansible_lsb.major_release == "7" and ansible_lsb.id == "RedHatEnterpriseServer"
 
 - name: register a variable for mount point
   set_fact: fsmd={{ item.mount }} fstype={{ item.fstype }}

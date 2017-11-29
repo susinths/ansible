@@ -5,6 +5,7 @@
   yum: name={{ item }}  state=present
   tags: lamp
   with_items: "{{ yum_pkgs_common }}"
+  when: ansible_lsb.major_release == "7" and ansible_lsb.id == "RedHatEnterpriseServer"
   
 - name: Allow LDAP login of groubp astrosdc
   lineinfile: dest=/etc/passwd line="+@astrosdc-core:x:::::"
@@ -29,6 +30,7 @@
   firewalld: service={{ item }} permanent=true state=enabled 
   with_items:
   -  http
+  when: ansible_lsb.major_release == "7" and ansible_lsb.id == "RedHatEnterpriseServer"
 
 ###TODO umask 0022 on alnathdb that causes effective r-xr--r-- for steinhh e.g /etc/opt/rh/rh-mariadb100/my.cnf.d/
 - name: Set ACL permissions to steinhh & osdcapps for div paths #1
