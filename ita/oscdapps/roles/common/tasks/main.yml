@@ -1,5 +1,6 @@
 ---
 # This playbook contains (common) plays that will be run on all (FS, DB, other type server) osdcapps nodes.
+###TODO use tags http://docs.ansible.com/ansible/latest/playbooks_tags.html on each task names to ease run of specific or group of tas\k names.  
 
 - name: Install some packages from std repo
   yum: name={{ item }}  state=present
@@ -25,6 +26,10 @@
   with_items:
    - httpd
    - autofs
+
+
+###TODO config for monthly log rotation on DBs and ?? on FSs?
+
 
 - name: Open http service on firewalld
   firewalld: service={{ item }} permanent=true state=enabled 

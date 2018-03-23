@@ -1,5 +1,8 @@
 ---
 # This playbook contains common plays for setting up a DB server for osdcapps/Stein Vidar
+###TODO use tags http://docs.ansible.com/ansible/latest/playbooks_tags.html on each task names to ease run of specific or group of task names. 
+###exclude = rh-mariadb100-mariadb* i /etc/yum.conf etter det.
+
 
 - name: Install MariaDB 10 from SCL + Apache from std repo
   yum: name={{ item }}  state=present

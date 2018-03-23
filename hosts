@@ -10,6 +10,9 @@
 
 
 
+#The new RHEL7 with new HW (Dell 2U workstations)
+[rhel7_clients]
+arietis
 
 [mikolaj]
 viscacha
@@ -48,23 +51,16 @@ beehive28.uio.no
 
 
 [oldgen_workstations]
-vega
-capra
 canopus
 agastya
 kahinub
 aschere
-arion
-gemma
-regulus
-sihor
-#svati
-rigil
-#rastaban
 alcor
 mirfak
 deneb
-suhail
+betelgeuse
+aldebaran
+karbana
 
 [servers_x11]
 acubens
@@ -178,12 +174,23 @@ tsugaru
 wolf
 #mairac
 
+[cvfs_workstations]
+enir
+algol
+shaula
+karbana
+dubhe
+arion
+hadar
+arietis
+
+
 [cvfs_hosts]
 enir
 algol
 shaula
 karbana
-electra
+#electra
 owl17
 owl18
 owl19
@@ -199,7 +206,7 @@ owl3
 owl4
 owl5
 owl6
-mimosa
+#mimosa
 proxima
 electra2
 charybdis2
@@ -216,43 +223,16 @@ owl13
 owl14
 owl15
 owl16
-achernar
-nekkar
-aramec
-papsukal
+#achernar
+#nekkar
+#aramec
+#papsukal
 beehive26
 beehive28
-
-[ganglia_owl]
-owl
-owl1
-owl2
-owl3
-owl4
-owl5
-owl6
-owl7
-owl8
-owl9
-owl10
-owl11
-owl12
-owl13
-owl14
-owl15
-owl16
-owl17
-owl18
-owl19
-owl20
-owl21
-owl22
-owl23
-owl24
-owl25
-owl26
-owl27
-owl28
+dubhe
+arion
+hadar
+arietis
 
 
 
@@ -262,7 +242,10 @@ owl28
 #owl3
 #tsih
 #sunflower
-beehive2
+#beehive2
+arietis
+pleiades2
+beehive4
 
 [susin_hosts]
 owl28
@@ -271,7 +254,7 @@ owl28
 #euclid3
 
 [unnif_hosts]
-alpheratz
+arietis
 
 [chrome]
 procyon
@@ -314,11 +297,69 @@ unukalhai
 rasalgethi
 zedaron
 sirrah
-alperatz
+alpheratz
 arion
 hadar
+schedar
+mirfak
+alcor
 
 
+[astro-rhel-clients]
+mirfak.uio.no
+alderamin.uio.no
+alrami.uio.no
+alrescha.uio.no
+ankaa.uio.no
+antares.uio.no
+svati.uio.no
+atria.uio.no
+bellatrix.uio.no
+corcaroli.uio.no
+alcor.uio.no
+karbana.uio.no
+kitalpha.uio.no
+aschere.uio.no
+mothallah.uio.no
+peacock.uio.no
+rukbat.uio.no
+sadalmelik.uio.no
+dubhe.uio.no
+alnair.uio.no
+simal.uio.no
+spica.uio.no
+ayil.uio.no
+polaris.uio.no
+adib.uio.no
+canopus.uio.no
+unukalhai.uio.no
+aryaman.uio.no
+agastya.uio.no
+kahinub.uio.no
+rastaban.uio.no
+rasalgethi.uio.no
+zedaron.uio.no
+giedi.uio.no
+schedar.uio.no
+sirrah.uio.no
+alpheratz.uio.no
+arietis.uio.no
+hadar.uio.no
+arion.uio.no
+enir.uio.no
+algol.uio.no
+castor.uio.no
+shaula.uio.no
+nishtya.uio.no
+hamal.uio.no
+aldebaran.uio.no
+procyon.uio.no
+sabik.uio.no
+sothi.uio.no
+alker.uio.no
+gemma.uio.no
+propus.uio.no
+#betelgeuse.uio.no
 
 
 [rhel7upd_phd]
@@ -394,6 +435,20 @@ beehive31
 beehive32-gpu
 beehive33-gpu
 
+[owl_cluster]
+owl17
+owl18
+owl19
+owl20
+owl21
+owl22
+owl23
+owl24
+owl25
+owl26
+owl27
+owl28
+
 
 
 [hercules_cluster]
@@ -412,6 +467,40 @@ hercules12
 hercules13
 hercules14
 hercules15 #IB NOT READY FOR FIREWALL ZONE ADJUSTMENT
+
+[euclid_cluster]
+euclid
+euclid2
+euclid3
+euclid4
+euclid5
+euclid6
+euclid7
+euclid8
+euclid9
+euclid10
+euclid11
+euclid12
+euclid13
+euclid14
+euclid15
+euclid16
+euclid17-gpu
+euclid18-gpu
+euclid19-gpu
+euclid20-gpu
+euclid21
+
+[pleiades_cluster]
+pleiades
+pleiades2
+
+[eagle_cluster]
+eagle
+eagle2
+eagle3
+
+
 
 
 [osdcapps_servers]
@@ -648,30 +737,6 @@ sadalmelik.uio.no
 simal.uio.no
 sothi.uio.no
 spica.uio.no
-
-
-[euclid_cluster]
-euclid
-euclid2
-euclid3
-euclid4
-euclid5
-euclid6
-euclid7
-euclid8
-euclid9
-euclid10
-euclid11
-euclid12
-euclid13
-euclid14
-euclid15
-euclid16
-euclid17-gpu
-euclid18-gpu
-euclid19-gpu
-euclid20-gpu
-euclid21
 
 
 [stornext_client_upgrade]

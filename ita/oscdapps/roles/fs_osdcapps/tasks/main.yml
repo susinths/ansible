@@ -1,5 +1,6 @@
 ---
 # This playbook contains common plays for setting up FS servers for osdcapps/Stein Vidar
+###TODO use tags http://docs.ansible.com/ansible/latest/playbooks_tags.html on each task names to ease run of specific or group of tas\k names.  
 
 - name: register a variable for mount point
   set_fact: fslv={{ item.mount }} fstype={{ item.fstype }}
