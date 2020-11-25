@@ -1,0 +1,8 @@
+---
+# This playbook will necessary packages to container nodes
+
+- name: Install  package
+  yum: name="{{ yum_pkgs_hosts_nas }}"  state=present
+  when: ansible_lsb.major_release == "8" and (ansible_lsb.id == "RedHatEnterpriseServer" or 
+    ansible_lsb.id == "CentOSStream" or ansible_lsb.id == "CentOS" or ansible_lsb.id == "Fedora")
+  tags: yum_pkgs_nas

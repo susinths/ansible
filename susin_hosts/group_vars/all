@@ -1,0 +1,49 @@
+---
+# Variables listed here are applicable to all host groups
+
+user: root
+users_bashrc: "susinths"
+root_bashrc: "root"
+myrepo_key: https://github.com/fossxplorer.keys
+flatpaks: ["org.signal.Signal", "com.vscodium.codium", "com.skype.Client"]
+
+yum_pkgs_epel: ["epel-release"]
+yum_pkgs_common: ["ethtool","chrony", "redhat-lsb", "emacs-nox", "tmux", "htop","pciutils", "usbutils" , "lsof", "strace", 
+"bind-utils","rsync", "telnet", "fio", "fping", "net-tools", "unzip", "wget", "curl", "git", "libaio ", "libaio-devel",
+ "man-pages", "nfs-utils"]
+yum_pkgs_php: [php", "php-process", "php-mysqlnd"]
+yum_pkgs_dev: ["gcc-c++ ", "gcc", "cmake", "libXp", "ncurses", "ncurses-devel"]
+
+yum_pkgs_host_ct: [podman", "skopeoz", "buildah", "systemd-containers"]
+##TODO: Add dive to  https://github.com/wagoodman/dive
+
+# The below is a collection of pkgs to be installed on all non-virtualized nodes
+yum_pkgs_baremetal:  ["lm_sensors","kernel-tools", "smartmontools", "libatasmart", "tuned", "stress-ng"]
+
+yum_pkgs_host_virt: ["virt-install", "stratisd", "stratis-cli"]
+yum_grp_pkgs_host_virt: ["Virtualization Host"]
+##TODO: add zfs
+
+#yum_pkgs_wks_common: ["flatpak", "terminator", "i3", "fedora-workstation-repositories",
+
+yum_pkgs_wks_gui: ["flatpak", "terminator", "i3", "fedora-workstation-repositories",
+"brave-browser", "google-chrome-beta", "google-chrome-stable", "pavucontrol"]
+
+
+nfs_fw_svc_custom: ["lockd.xml", "mountd.xml", "rpc-bind.xml"]
+
+yum_pkgs_db: ["rh-mariadb100", "rh-mariadb100-mariadb-devel.x86_64", "mariadb"]
+
+yum_pkgs_hosts_nas: ["mdadm", "targetcli"]
+
+## The following facts exist for a KVM host (hypervisor) 
+## "ansible_virtualization_role": "host",
+## "ansible_virtualization_type": "kvm",
+
+## The following facts exist for a KVM guest 
+## "ansible_virtualization_role": "guest",
+## "ansible_virtualization_type": "kvm",
+
+## The following facts exist for an nspawn guest 
+## "ansible_virtualization_role": "guest",
+## "ansible_virtualization_type": "systemd-nspawn",

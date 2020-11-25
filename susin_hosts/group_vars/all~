@@ -1,0 +1,40 @@
+---
+# Variables listed here are applicable to all host groups
+
+httpd_port: 80
+ntpserver: 192.168.1.2
+repository: https://github.com/bennojoy/mywebapp.git
+
+user: root
+users_bashrc: "susinths"
+root_bashrc: "root"
+
+yum_pkgs_epel: ["epel-release"]
+yum_pkgs_common: ["ethtool","chrony", "redhat-lsb", "emacs-nox", "tmux", "htop","pciutils", "usbutils" , "lsof", "strace", 
+"bind-utils","rsync", "telnet", "fio", "fping", "net-tools", "unzip", "wget", "curl", "git", "libaio ", "libaio-devel",
+ "man-pages", "nfs-utils"]
+yum_pkgs_php: [php", "php-process", "php-mysqlnd"]
+yum_pkgs_dev: ["gcc-c++ ", "gcc", "cmake", "libXp", "ncurses", "ncurses-devel"]
+
+yum_pkgs_host_ct: [podman", "skopeo", "buildah", "systemd-containers"]
+##TODO: Add dive to  https://github.com/wagoodman/dive
+
+# The below is a collection of pkgs to be installed on all non-virtualized nodes
+yum_pkgs_baremetal:  ["lm_sensors","kernel-tools", "smartmontools", "libatasmart", "tuned", "stress-ng"]
+
+yum_pkgs_host_virt: ["virt-install", "stratisd", "stratis-cli"]
+yum_grp_pkgs_host_virt: ["Virtualization Host"]
+##TODO: add zfs
+
+ym_pkgs_workstation: ["flatpak", "terminator", "i3", "fedora-workstation-repositories", 
+"brave-browser", "google-chrome-beta", "google-chrome-stable"]
+nfs_fw_svc_custom: ["lockd.xml", "mountd.xml", "rpc-bind.xml"]
+
+yum_pkgs_db: ["rh-mariadb100", "rh-mariadb100-mariadb-devel.x86_64", "mariadb"]
+
+yum_pkgs_hosts_nas: ["mdadm", "targetcli"]
+
+##"ansible_virtualization_role": "host",
+# "ansible_virtualization_type": "kvm",
+##  "ansible_virtualization_role": "guest",
+  #      "ansible_virtualization_type": "kvm",

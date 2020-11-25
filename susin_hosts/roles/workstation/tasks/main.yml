@@ -1,0 +1,19 @@
+---
+# This playbook contains common plays that will be run on host group workstations.
+
+- name: Install package
+  yum: name="{{ yum_pkgs_wks_gui }}" state=present update_cache=yes
+  when: ansible_distribution == "Fedora"
+  #  when: ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7
+  tags: yum_pkgs_wks_gui
+
+##TODO: handle flatpaks via flatpak module: Signal, VSCodium, Skype etc.
+##TODO Copy configs like ssh, i3 etc
+
+
+# Requirement for the task below: To install it use: ansible-galaxy collection install community.general.
+#- name: Install flatpaks
+#    community.general.flatpak:
+#    name:  "{{ flatpaks }}"
+#    with_items: "{{ flatpaks }}
+#   state: present

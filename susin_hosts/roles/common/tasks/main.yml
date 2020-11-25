@@ -1,0 +1,97 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- name: Set authorized key for user {{ user }} copying it from current user
+  ansible.posix.authorized_key:
+    user: "{{ user }}"
+    state: present
+    # key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    key: https://github.com/fossxplorer.keys
+#    tags: ssh_key
+
+
+## TODO: create {{ users_bashrc }} if they do not exist
+- name: Adjust .bashrc for users
+  lineinfile:
+    path: "/home/{{ users_bashrc }}/.bashrc"
+    state: present
+    line: |
+      export HISTFILESIZE=10000
+      export HISTSIZE=10000
+
+- name: Adjust .bashrc for root
+  lineinfile:
+    path: "/root/.bashrc"
+    state: present
+    line: |
+      export HISTFILESIZE=10000
+      export HISTSIZE=10000
+
+
+#- name: Import a EPEL key from a url
+#  rpm_key:
+#    state: present
+#    key: https://fedora.uib.no/epel/RPM-GPG-KEY-EPEL-8
+#    when: not (ansible_facts['lsb']['id'] == "Fedora")
+##    tags: import_epel_key
+
+# Rpm_key does not seem to be working, doing it manually
+- name: Import key manually
+  command: rpm --import https://fedora.uib.no/epel/RPM-GPG-KEY-EPEL-8
+#  when: not (ansible_facts['lsb']['id'] == "Fedora")
+  when: not ansible_distribution == "Fedora"
+
+- name: Install EPEL
+  yum: name="{{ yum_pkgs_epel }}" state=present
+#  when: not (ansible_facts['lsb']['id'] == "Fedora") and ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7 
+  when: not ( ansible_distribution  == "Fedora") and ansible_distribution_file_variety == "RedHat" and ansible_distribution_major_version | int >= 7 
+  retries: 5
+  delay: 10
+  tags: yum_pkgs_epel
+
+- name: Install common packages
+  yum: name="{{ yum_pkgs_common }}" state=present update_cache=yes
+#  when: ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7
+  when: ansible_distribution_file_variety == "RedHat" and ansible_distribution_major_version | int >= 7 
+  tags: yum_pkgs_common
+
+- name: Install packages on non-virtualized nodes
+  yum: name="{{ yum_pkgs_baremetal }}" state=present update_cache=yes
+#  when: ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7
+  when: not ansible_virtualization_role == "guest" and ( ansible_distribution  == "Fedora" or ( ansible_distribution_file_variety == "RedHat" and ansible_distribution_major_version | int >= 7))
+  tags: yum_pkgs_baremetal
+
+#TODO move this to own role
+#- name: Install package for virt nodes
+#  yum: name="{{ yum_pkgs_host_virt }}" state=present update_cache=yes
+#  when: not ansible_virtualization_role == "guest" and ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7
+#  when: not ansible_virtualization_role == "guest" and ansible_distribution_file_variety == "RedHat" and ansible_distribution_major_version | int >= 7 
+#  tags: yum_pkgs_hosts_virt
+
+#- name: Install chrony
+#  yum:
+#    name: chrony
+#    state: present
+#  tags: chrony
+
+#- name: Configure ntp file
+#  template:
+#    src: ntp.conf.j2
+#    dest: /etc/ntp.conf
+#  tags: ntp
+#  notify: restart ntp
+- name: Populate service facts
+  service_facts:
+
+- name: Start the chronyd service
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
+#    when: ansible_facts.services['chronyd.service'] is defined
+  tags: chrony
+
+- name: test to see if selinux is running
+  command: getenforce
+  register: sestatus
+  changed_when: false

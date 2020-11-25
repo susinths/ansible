@@ -1,0 +1,10 @@
+---
+# This playbook contains common plays that will be run on host group workstations.
+
+- name: Install package
+  yum: name="{{ yum_pkgs_wks_gui }}" state=present update_cache=yes
+  when: ansible_distribution == "Fedora"
+  #  when: ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7
+  tags: yum_pkgs_common
+
+#TODO: handle flatpaks via flatpak module. Copy configs like ssh, i3 etc
