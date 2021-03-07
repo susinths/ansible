@@ -29,7 +29,13 @@
   roles:
     - container
     
+- name: Hypervisor hosts
+  hosts: hosts_virt
+  remote_user: root
 
+  roles:
+    - virt
+    
 
 
 #
