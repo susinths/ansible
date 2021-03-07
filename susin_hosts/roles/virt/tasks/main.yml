@@ -1,0 +1,20 @@
+---
+# This playbook contains common plays that will be run on virtualization hosts, i.e hypervisors
+
+##TODO move this to own role
+- name: Install package for virt nodes
+  yum: name="{{ yum_pkgs_host_virt }}" state=present update_cache=yes
+  when: ansible_virtualization_role == "host" and ansible_virtualization_type == "kvm" and ( ansible_distribution  == "Fedora" or ( ansible_distribution_file_variety == "RedHat" and ansible_distribution_major_version | int >= 7))
+  tags: yum_pkgs_hosts_virt
+  notify:
+    - Start libvirtd
+
+#- name: Gather the package facts
+#  package_facts:
+#    manager: auto
+
+#- name: Start the libvirtd
+#  service:
+#    name: libvirtd
+#    state: started
+#    enabled: yes
