@@ -10,7 +10,7 @@ flatpaks: ["org.signal.Signal", "com.vscodium.codium", "com.skype.Client"]
 yum_pkgs_epel: ["epel-release"]
 yum_pkgs_common: ["ethtool","chrony", "redhat-lsb", "emacs-nox", "tmux", "htop","pciutils", "usbutils" , "lsof", "strace", 
 "bind-utils","rsync", "telnet", "fio", "fping", "net-tools", "unzip", "wget", "curl", "git", "libaio ", "libaio-devel",
- "man-pages", "nfs-utils", "xclip", "yum-utils", "bash-completion" ]
+ "man-pages", "nfs-utils", "xclip", "yum-utils", "bash-completion", "sysstat" ]
 yum_pkgs_php: [php", "php-process", "php-mysqlnd"]
 yum_pkgs_dev: ["gcc-c++ ", "gcc", "cmake", "libXp", "ncurses", "ncurses-devel"]
 

@@ -1,28 +1,23 @@
 [hosts_generic]
-centoss01.localdomain
 centoss02.localdomain
+lb01.localdomain
 
 [hosts_virt]
+virt0.localdomain
 virt1.localdomain
 virt2.localdomain
+hpms1.localdomain
 
 [hosts_container]
-192.168.10.152
-192.168.10.30
-
-[container_nodes]
-192.168.10.31
 
 [hosts_wks_gui]
-192.168.10.161
-fedora1.localdomain
+#fedora1.localdomain
 
 #[hosts_wks_headless]
-#192.168.10.50
-
 
 [hosts_nas]
-192.168.10.40
+hpms.localdomain
+
 
 ##TODO
 #[hosts_zfs]
