@@ -1,0 +1,73 @@
+{% comment %}
+This is just a sample Jinja template file to be used with Naemon monitor host config creation!
+{% endcomment %}
+
+{% for myvar in myvar_list %}
+
+define host {
+	use                             linux-server
+	host_name                       {{myvar.hostname}}
+	alias                           {{myvar.alias}}
+	address                         {{myvar.address}}
+	max_check_attempts              5
+	check_period                    24x7
+	notification_interval           30
+	notification_period             24x7
+}
+
+
+  {% for service1 in myvar.services %}
+    {% if service1=="ping" %}
+	define service{
+        	use                             generic-service         ; Name of service template to use
+        	host_name                       {{myvar.hostname}}
+        	service_description             PING
+        	check_command                   check_ping!100.0,20%!500.0,60%
+        	notifications_enabled           1
+        }
+    {% endif %}
+
+ 
+    {% if service1=="ssh" %}
+	define service {
+	        use                             generic-service
+	        host_name                       {{myvar.hostname}}
+	        service_description             SSH
+	        check_command                   check_ssh
+	        notifications_enabled           1
+        }
+    {% endif %} 
+
+    {% if service1=="http" %}
+	define service {
+	        use                             generic-service
+	        host_name                       {{myvar.hostname}}
+	        service_description             HTTP
+	        check_command                   check_http
+	        notifications_enabled           1
+        }
+    {% endif %} 
+
+    {% if service1=="nrpe_check_load" %}
+	define service {
+	        use                             generic-service
+	        host_name                       {{myvar.hostname}}
+	        service_description             CPU Load
+	        check_command                   check_nrpe!check_load
+	        notifications_enabled           1
+        }
+    {% endif %} 
+
+    {% if service1=="nrpe_alias_cpu" %}
+	define service {
+	        use                             generic-service
+	        host_name                       {{myvar.hostname}}
+	        service_description             CPU Load
+	        check_command                   check_nrpe!alias_cpu
+	        notifications_enabled           1
+        }
+    {% endif %} 
+
+
+  {% endfor %}
+{% endfor %}

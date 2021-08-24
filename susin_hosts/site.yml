@@ -7,6 +7,7 @@
 
   roles:
     - common
+    - monitoring
 
 - name: Workstation nodes
   hosts: hosts_wks_headless, hosts_wks_gui
@@ -35,7 +36,14 @@
 
   roles:
     - virt
-    
+
+- name: Monitoring (server) hosts
+  hosts: hosts_monitoring
+  remote_user: root
+
+  roles:
+    - monitoring
+
 
 
 #

@@ -1,6 +1,7 @@
 [hosts_generic]
 centoss02.localdomain
 lb01.localdomain
+monitor0.localdomain
 
 [hosts_virt]
 virt0.localdomain
@@ -8,7 +9,16 @@ virt1.localdomain
 virt2.localdomain
 hpms1.localdomain
 
+[hosts_ha]
+lb01.localdomain
+lb02.localdomain
+monitor0.localdomain
+
+[hosts_monitoring]
+monitor0.localdomain
+
 [hosts_container]
+
 
 [hosts_wks_gui]
 #fedora1.localdomain
