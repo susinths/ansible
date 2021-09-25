@@ -41,6 +41,7 @@ yum_pkgs_lb: ["keepalived", "mosh"]
 
 
 ##TODO HAProxy on LBs https://cbs.centos.org/kojifiles/packages/haproxy/2.2.2/1.el8/x86_64/haproxy-2.2.2-1.el8.x86_64.rpm
+yum_pkgs_haproxy: ["https://cbs.centos.org/kojifiles/packages/haproxy/2.2.3/2.el8/x86_64/haproxy-2.2.3-2.el8.x86_64.rpm"]
 
 ## The following facts exist for a KVM host (hypervisor) 
 ## "ansible_virtualization_role": "host",

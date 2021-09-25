@@ -9,6 +9,14 @@
     - common
     - monitoring
 
+
+- name: HA nodes
+  hosts: hosts_ha
+  remote_user: root
+
+  roles:
+    - ha
+
 - name: Workstation nodes
   hosts: hosts_wks_headless, hosts_wks_gui
   remote_user: root

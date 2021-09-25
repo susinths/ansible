@@ -7,12 +7,19 @@ monitor0.localdomain
 virt0.localdomain
 virt1.localdomain
 virt2.localdomain
+virt3.localdomain
 hpms1.localdomain
 
 [hosts_ha]
-lb01.localdomain
-lb02.localdomain
-monitor0.localdomain
+#lb01.localdomain
+#lb02.localdomain
+#monitor0.localdomain
+lb2.localdomain
+
+[hosts_ceph]
+hpms.localdomain
+virt0.localdomain
+virt3.localdomain
 
 [hosts_monitoring]
 monitor0.localdomain
