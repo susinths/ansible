@@ -1,39 +1,49 @@
 [hosts_generic]
-centoss02.localdomain
 lb01.localdomain
 monitor0.localdomain
+#nas0.localdomain
+microshift.localdomain
+rhel1.localdomain
+virt1.localdomain
+141.144.198.83
 
 [hosts_virt]
 virt0.localdomain
-virt1.localdomain
 virt2.localdomain
-virt3.localdomain
-hpms1.localdomain
+#virt3.localdomain
+virt1.localdomain
 
 [hosts_ha]
 #lb01.localdomain
 #lb02.localdomain
 #monitor0.localdomain
-lb2.localdomain
+#lb2.localdomain
+
+[hosts_mellanox]
+#virt0.localdomain
+#hpms1.localdomain
+#virt3.localdomain
 
 [hosts_ceph]
-hpms.localdomain
-virt0.localdomain
-virt3.localdomain
+#hpms.localdomain
+#virt0.localdomain
+#virt3.localdomain
 
 [hosts_monitoring]
 monitor0.localdomain
 
 [hosts_container]
-
+lb01.localdomain
 
 [hosts_wks_gui]
 #fedora1.localdomain
+#gaming.localdomain
 
 #[hosts_wks_headless]
 
 [hosts_nas]
-hpms.localdomain
+#nas0.localdomain
+#hpms.localdomain
 
 
 ##TODO

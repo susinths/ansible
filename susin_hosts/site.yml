@@ -9,6 +9,12 @@
     - common
     - monitoring
 
+- name: 40Gb/s NIC nodes
+  hosts: hosts_mellanox
+  remote_user: root
+
+  roles:
+    - mellanox
 
 - name: HA nodes
   hosts: hosts_ha
@@ -32,7 +38,7 @@
     - nas
 
 - name: Container nodes
-  hosts: containers_nodes
+  hosts: hosts_container
   remote_user: root
 
   roles:

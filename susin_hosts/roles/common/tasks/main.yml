@@ -10,7 +10,7 @@
 #    tags: ssh_key
 
 
-## TODO: create {{ users_bashrc }} if they do not exist
+## TODO: create {{ users_bashrc }} if they do not exist
 - name: Adjust .bashrc for users
   lineinfile:
     path: "/home/{{ users_bashrc }}/.bashrc"
@@ -44,16 +44,19 @@
 
 - name: Install EPEL
   yum: name="{{ yum_pkgs_epel }}" state=present
-#  when: not (ansible_facts['lsb']['id'] == "Fedora") and ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7 
-  when: not ( ansible_distribution  == "Fedora") and ansible_distribution_file_variety == "RedHat" and ansible_distribution_major_version | int >= 7 
+#  when: not (ansible_facts['lsb']['id'] == "Fedora") and ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7
+  when: not (ansible_distribution == "Fedora" or ansible_distribution == "Redhat") and ( ansible_distribution == "CentOS" or ansible_distribution_file_variety == "Redhat") and ansible_distribution_major_version | int >= 7 
+#  ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7 
+#  when: not ( ansible_distribution  == "Fedora") and (ansible_distribution_file_variety == "RedHat" or ansible_distribution_file_variety == "CentOS")  and (ansible_distribution_major_version | int >=
   retries: 5
   delay: 10
   tags: yum_pkgs_epel
 
+
 - name: Install common packages
   yum: name="{{ yum_pkgs_common }}" state=present update_cache=yes
 #  when: ansible_facts['os_family'] == "RedHat" and ansible_facts['lsb']['major_release'] | int >= 7
-  when: ansible_distribution_file_variety == "RedHat" and ansible_distribution_major_version | int >= 7 
+  when: (ansible_distribution_file_variety == "RedHat" or ansible_distribution_file_variety == "CentOS")and ansible_distribution_major_version | int >= 7 
   tags: yum_pkgs_common
 
 - name: Install packages on non-virtualized nodes

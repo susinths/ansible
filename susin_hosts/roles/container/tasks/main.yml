@@ -1,53 +1,29 @@
 ---
 # This playbook will install necessary software for container hosts 
 
-- name: Install package
-  yum: name="{{ yum_pkgs_hosts_ct}}"  state=present
-  when: ansible_lsb.major_release == "8" and (ansible_lsb.id == "RedHatEnterpriseServer" or 
-    ansible_lsb.id == "CentOSStream" or ansible_lsb.id == "CentOS" or ansible_lsb.id == "Fedora")
-  tags: yum_pkgs_hosts_ct
+#- name: Install package
+#  yum: name="{{ yum_pkgs_hosts_ct}}"  state=present
+#  when: ansible_lsb.major_release == "8" and (ansible_lsb.id == "RedHatEnterpriseServer" or 
+#    ansible_lsb.id == "CentOSStream" or ansible_lsb.id == "CentOS" or ansible_lsb.id == "Fedora")
+#  tags: yum_pkgs_hosts_ct
 
-##TODO install elrepo and mainline kernel
+# This playbook will test podman pods
+- name: Test Podman MariaDB
+  containers.podman.podman_play:
+#    kube_file: /home/susinths/.ansible/wordpress_nginx-pod.yaml
+    kube_file: /root/tmp/podman/wordpress/wordpress_mariadb_1.yaml
+    state: started
 
-#- name: Configure SELinux to start mysql on any port
-#  seboolean:
-#    name: mysql_connect_any ansible_lsb.id == "CentOSStream"
-#    state: true
-#    persistent: yes
-#  when: sestatus.rc != 0
-#
-#- name: Create Mysql configuration file
-#  template:
-#    src: my.cnf.j2
-#    dest: /etc/my.cnf
-#  notify:
-#  - restart mysql
-#
-#- name: Start Mysql Service
-#  service:
-#    name: mysqld
+
+ #- name: Test Podman Wordpress
+ # containers.podman.podman_play:
+#    kube_file: /home/susinths/.ansible/wordpress_nginx-pod.yaml
+#    kube_file: /root/tmp/podman/wordpress/wordpress_wordpress_1.yaml
 #    state: started
-#    enabled: yes
-#
-#- name: insert iptables rule
-#  lineinfile:
-#    dest: /etc/sysconfig/iptables
-#    state: present
-#    regexp: "{{ mysql_port }}"
-#    insertafter: "^:OUTPUT "
-#    line: "-A INPUT -p tcp  --dport {{ mysql_port }} -j  ACCEPT"
-#  notify: restart iptables
-#
-#- name: Create Application Database
-#  mysql_db:
-#    name: "{{ dbname }}"
-#    state: present
-#
-#- name: Create Application DB User
-#  mysql_user:
-#    name: "{{ dbuser }}"
-#    password: "{{ upassword }}"
-#    priv: "*.*:ALL"
-#    host: '%'
-#    state: present
-#
+
+#- name: Start Fluentbit Podman container
+#  containers.podman.podman_pod:
+#    name: wordpressmariadb1
+#    state: started
+
+
